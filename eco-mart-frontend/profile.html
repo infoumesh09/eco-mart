@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile - Eco Mart</title>
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.profile-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.profile-sidebar {
+  background: var(--card-background);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+  transition: all 0.3s ease;
+}
+
+.profile-picture {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 2rem;
+  border-radius: 50%;
+  background: var(--card-background);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+  border: 6px solid var(--card-background);
+}
+
+.profile-picture img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.profile-picture-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+}
+
+.profile-picture:hover .profile-picture-overlay {
+  opacity: 1;
+}
+
+.profile-info {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--card-background);
+  border-radius: 15px;
+}
+
+.profile-info h1 {
+  font-size: 1.8rem;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.profile-info p {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-item {
+  background: var(--card-background);
+  padding: 1.2rem;
+  border-radius: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.stat-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--hover-shadow);
+}
+
+.stat-item h3 {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.stat-item p {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-color);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.action-button i {
+  font-size: 1.2rem;
+  color: var(--primary);
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateX(5px);
+}
+
+.action-button:hover i {
+  color: white;
+}
+
+.profile-main {
+  background: var(--card-background);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+}
+
+.profile-sections {
+  display: grid;
+  gap: 2rem;
+}
+
+.profile-section {
+  background: var(--card-background);
+  padding: 2rem;
+  border-radius: 15px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.profile-section:hover {
+  box-shadow: var(--hover-shadow);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.section-header h2 {
+  font-size: 1.4rem;
+  color: var(--text-dark);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.section-header h2 i {
+  color: var(--primary);
+}
+
+.edit-button {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  padding: 0.5rem;
+}
+
+.info-item {
+  background: var(--background-color);
+  padding: 1.2rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  background: var(--card-background);
+  box-shadow: var(--hover-shadow);
+}
+
+.info-item label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+
+.info-item label i {
+  color: var(--primary);
+}
+
+.info-item p {
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.info-item p.empty {
+  color: var(--text-secondary);
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.info-item p:not(.empty) {
+  color: var(--text-dark);
+}
+
+/* A more obvious indicator that data needs to be filled */
+.profile-section:hover .info-item p.empty {
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 0.3rem;
+}
+
+.info-item input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: none;
+  background: var(--card-background);
+  color: var(--text-color);
+}
+
+.info-item input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+  outline: none;
+}
+
+.info-item.editing {
+  background: var(--card-background);
+  box-shadow: var(--hover-shadow);
+}
+
+.save-changes {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  display: none;
+  margin-top: 2rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.save-changes:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.save-changes.show {
+  display: inline-block;
+}
+
+@media (max-width: 992px) {
+  .profile-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .profile-sidebar {
+    position: relative;
+    top: 0;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .profile-container {
+    padding: 1rem;
+    margin: 1rem;
+  }
+  
+  .profile-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .edit-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Placeholder styles */
+.info-item p.empty {
+  color: #999;
+  font-style: italic;
+}
+
+/* Toast notification styles */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.toast.success {
+  background-color: var(--success);
+}
+
+.toast.error {
+  background-color: var(--error);
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+/* Profile page specific styles */
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-section {
+  margin-bottom: 30px;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.orders-table th, .orders-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.orders-table th {
+  background-color: #f7f7f7;
+}
+
+.orders-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.order-details-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.order-details-btn:hover {
+  background-color: #45a049;
+}
+
+.no-orders {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+}
+
+/* Modal Styles */
+#modal-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+.modal-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.order-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.order-items-table th, .order-items-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.order-summary {
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.summary-total {
+  font-weight: bold;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #ddd;
+}
+
+.address-section, .payment-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+/* Order Cards Styles */
+.order-card {
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--hover-shadow);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.order-header h4 {
+  font-size: 1.1rem;
+  color: var(--text-dark);
+}
+
+.order-date {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.order-details {
+  margin-bottom: 1rem;
+}
+
+.order-details p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.status-processing {
+  color: #f57c00; /* Orange */
+}
+
+.status-shipped {
+  color: #2196f3; /* Blue */
+}
+
+.status-delivered {
+  color: #4caf50; /* Green */
+}
+
+.status-cancelled {
+  color: #f44336; /* Red */
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* Header Nav Styles */
+.nav-links a.active {
+  color: var(--primary);
+  position: relative;
+  font-weight: 600;
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary);
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 200px;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu a, 
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-menu i {
+  margin-right: 12px;
+  color: var(--primary);
+  width: 16px;
+  text-align: center;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-menu a.active {
+  background: rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 8px 0;
+}
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <nav class="main-nav container">
+      <a href="newhome.html" class="logo">
+        <img src="images/newlogo.png" alt="Eco Mart Logo" height="30">
+      </a>
+      <div class="nav-links">
+        <a href="newhome.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="category.html">Categories</a>
+        <a href="offers.html">Offers</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="cart.html">Cart</a>
+        <a href="profile.html" class="active">Profile</a>
+      </div>
+      <div id="auth-section">
+        <!-- Will be populated by JavaScript -->
+      </div>
+    </nav>
+  </header>
+
+  <div class="profile-container">
+    <div class="profile-sidebar">
+      <div class="profile-picture">
+        <img src="images/userlogo.png" alt="Profile Picture" id="profilePicture">
+        <div class="profile-picture-overlay" onclick="document.getElementById('photoInput').click()">
+          <i class="fas fa-camera fa-2x"></i>
+        </div>
+        <input type="file" id="photoInput" style="display: none" accept="image/*" onchange="handlePhotoChange(event)">
+      </div>
+      
+      <div class="profile-info">
+        <h1 id="userName">Loading...</h1>
+        <p>Member since <span id="memberSince">Loading...</span></p>
+      </div>
+
+      <div class="profile-stats">
+        <div class="stat-item">
+          <h3>12</h3>
+          <p>Orders</p>
+        </div>
+        <div class="stat-item">
+          <h3>5</h3>
+          <p>Wishlist</p>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <a href="cart.html" class="action-button">
+          <i class="fas fa-shopping-bag"></i>
+          My Orders
+        </a>
+        <a href="wishlist.html" class="action-button">
+          <i class="fas fa-heart"></i>
+          Wishlist
+        </a>
+        <a href="settings.html" class="action-button">
+          <i class="fas fa-cog"></i>
+          Settings
+        </a>
+        <button class="action-button" onclick="handleLogout()">
+          <i class="fas fa-sign-out-alt"></i>
+          Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="profile-main">
+      <div class="profile-sections">
+        <div class="profile-section">
+          <div class="section-header">
+            <h2><i class="fas fa-user-circle"></i> Personal Information</h2>
+            <button class="edit-button" onclick="toggleEdit('personal')">
+              <i class="fas fa-pen"></i>
+              Edit
+            </button>
+          </div>
+          <div class="info-grid" id="personalInfo">
+            <div class="info-item">
+              <label><i class="fas fa-user"></i> Full Name</label>
+              <p class="empty">Enter your name</p>
+              <input type="text" name="name" placeholder="Enter your full name">
+            </div>
+            <div class="info-item">
+              <label><i class="fas fa-envelope"></i> Email</label>
+              <p class="empty">Enter your email</p>
+              <input type="email" name="email" placeholder="Enter your email">
+            </div>
+            <div class="info-item">
+              <label><i class="fas fa-phone"></i> Phone</label>
+              <p class="empty">Enter your phone number</p>
+              <input type="tel" name="phone" pattern="[0-9]{10}" placeholder="Enter 10-digit phone number">
+            </div>
+            <div class="info-item">
+              <label><i class="fas fa-birthday-cake"></i> Date of Birth</label>
+              <p class="empty">Enter your birth date</p>
+              <input type="date" name="dob">
+            </div>
+            <div class="info-item">
+              <label><i class="fas fa-home"></i> Street Address</label>
+              <p class="empty">Enter your street address</p>
+              <input type="text" name="street" placeholder="Enter street address">
+            </div>
+            <div class="info-item">
+              <label><i class="fas fa-city"></i> City</label>
+              <p class="empty">Enter your city</p>
+              <input type="text" name="city" placeholder="Enter city">
+            </div>
+            <div class="info-item">
+              <label><i class="fas fa-map"></i> State</label>
+              <p class="empty">Enter your state</p>
+              <input type="text" name="state" placeholder="Enter state">
+            </div>
+            <div class="info-item">
+              <label><i class="fas fa-map-pin"></i> PIN Code</label>
+              <p class="empty">Enter PIN code</p>
+              <input type="text" name="pincode" pattern="[0-9]{6}" placeholder="Enter 6-digit PIN code">
+            </div>
+        </div>
+          <button class="save-changes" onclick="saveChanges('personal')">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification container -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api'; // API endpoint
+    let isServerOnline = false;
+
+    // A more robust error handling function for API calls
+    async function handleApiError(response, defaultErrorMessage = 'An error occurred') {
+      try {
+        // Try to parse the error JSON response
+        const errorData = await response.json();
+        
+        // Check if there's a specific error message
+        if (errorData && errorData.message) {
+          throw new Error(errorData.message);
+        } else if (errorData && errorData.error) {
+          throw new Error(errorData.error);
+        }
+      } catch (e) {
+        // If JSON parsing fails or there's no specific message, use HTTP status
+        if (response.status === 401) {
+          throw new Error('Authentication failed. Please login again.');
+        } else if (response.status === 403) {
+          throw new Error('You do not have permission to perform this action.');
+        } else if (response.status === 404) {
+          throw new Error('Resource not found.');
+        } else if (response.status === 429) {
+          throw new Error('Too many requests. Please try again later.');
+        } else if (response.status >= 500) {
+          throw new Error('Server error. Please try again later.');
+        }
+      }
+      
+      // If all else fails, use the default message
+      throw new Error(`${defaultErrorMessage} (Status: ${response.status})`);
+    }
+
+    // Apply saved theme on page load
+    function applySavedTheme() {
+      // Get theme setting from localStorage
+      const settings = JSON.parse(localStorage.getItem('ecomart-settings')) || {
+        appearance: { theme: 'light' }
+      };
+      
+      const theme = settings.appearance.theme;
+      
+      // Apply the theme
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else if (theme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+      } else if (theme === 'system') {
+        // Check for system preference
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+      }
+    }
+    
+    // Apply theme immediately
+    applySavedTheme();
+    
+    // Function to show toast notification
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Function to toggle edit mode
+    function toggleEdit(section) {
+      try {
+      const container = document.getElementById(section + 'Info');
+        if (!container) {
+          console.error(`Container not found for section: ${section}Info`);
+          return;
+        }
+        
+      const items = container.getElementsByClassName('info-item');
+        if (!items || items.length === 0) {
+          console.error(`No info items found in section: ${section}Info`);
+          return;
+        }
+        
+      const saveButton = container.nextElementSibling;
+        if (!saveButton) {
+          console.error(`Save button not found for section: ${section}Info`);
+          return;
+        }
+        
+      const editButton = container.previousElementSibling.querySelector('.edit-button');
+        if (!editButton) {
+          console.error(`Edit button not found for section: ${section}Info`);
+          return;
+        }
+        
+        // Check if we're currently in edit mode (at least one item has the editing class)
+        const isCurrentlyEditing = Array.from(items).some(item => item.classList.contains('editing'));
+        
+        if (!isCurrentlyEditing) {
+          // Load the most recent data before entering edit mode
+          let fieldData = {};
+          try {
+            // First try session storage
+            const sessionData = sessionStorage.getItem('currentProfileData');
+            if (sessionData) {
+              fieldData = JSON.parse(sessionData);
+            } else {
+              // Then try local storage
+              const localData = localStorage.getItem('user');
+              if (localData) {
+                fieldData = JSON.parse(localData);
+              }
+            }
+          } catch (e) {
+            console.error('Error loading field data:', e);
+          }
+          
+          // Switching to edit mode
+      Array.from(items).forEach(item => {
+        const input = item.querySelector('input');
+        const p = item.querySelector('p');
+        
+            if (!input || !p) return; // Skip this item if input or p is missing
+            
+          item.classList.add('editing');
+          input.style.display = 'block';
+          p.style.display = 'none';
+            
+            // Set the input value to the current text content, unless it's a placeholder
+            const placeholderText = getEmptyPlaceholder(input.name);
+            
+            // If the displayed text is a placeholder, use empty string or try to get stored data
+            if (p.textContent === placeholderText) {
+              // Try to get value from field data
+              let value = '';
+              switch(input.name) {
+                case 'name':
+                  // For name, combine firstName and lastName
+                  const firstName = fieldData.firstName || '';
+                  const lastName = fieldData.lastName || '';
+                  if (firstName || lastName) {
+                    value = `${firstName} ${lastName}`.trim();
+                  }
+                  break;
+                case 'phone':
+                  value = fieldData.mobileNumber || fieldData.phone || '';
+                  break;
+                case 'street':
+                  value = fieldData.streetAddress || fieldData.address || '';
+                  break;
+                case 'email':
+                  value = fieldData.email || (fieldData.Auth ? fieldData.Auth.email : '') || '';
+                  break;
+                case 'dob':
+                  // Format as YYYY-MM-DD for the date input
+                  if (fieldData.dob) {
+                    const date = new Date(fieldData.dob);
+                    value = date.toISOString().split('T')[0];
+                  }
+                  break;
+                default:
+                  // For other fields, try direct matches
+                  value = fieldData[input.name] || '';
+              }
+              
+              input.value = value;
+            } else {
+              input.value = p.textContent;
+            }
+          });
+          
+          editButton.innerHTML = '<i class="fas fa-times"></i> Cancel';
+          saveButton.style.display = 'block';
+        } else {
+          // Switching back to view mode (canceling edit)
+          Array.from(items).forEach(item => {
+            const input = item.querySelector('input');
+            const p = item.querySelector('p');
+            
+            if (!input || !p) return; // Skip this item if input or p is missing
+            
+          item.classList.remove('editing');
+          input.style.display = 'none';
+          p.style.display = 'block';
+          });
+          
+          editButton.innerHTML = '<i class="fas fa-pen"></i> Edit';
+          saveButton.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Error toggling edit mode:', error);
+        showToast('An error occurred while toggling edit mode', 'error');
+      }
+    }
+
+    // Function to save changes to backend
+    async function saveChanges(section) {
+      try {
+        const container = document.getElementById(section + 'Info');
+        const items = container.getElementsByClassName('info-item');
+        const data = {};
+        
+        // Get user data from form fields
+        Array.from(items).forEach(item => {
+          const input = item.querySelector('input');
+          const p = item.querySelector('p');
+          const value = input.value.trim();
+          
+          // Map HTML form fields to data object
+          switch(input.name) {
+            case 'name':
+              // Split name into first and last name
+              const nameParts = value.split(' ');
+              data.firstName = nameParts[0] || '';
+              data.lastName = nameParts.slice(1).join(' ') || '';
+              break;
+            case 'phone':
+              data.mobileNumber = value;
+              break;
+            case 'street':
+              data.streetAddress = value;
+              break;
+            case 'dob':
+              data.dob = value; // ISO format for API
+              break;
+            default:
+              // For city, state, pincode, email
+          data[input.name] = value;
+          }
+          
+          // Update display text immediately for better UX
+          if (input.name === 'dob' && value) {
+            // Format the date for display
+            const date = new Date(value);
+            p.textContent = date.toLocaleDateString();
+          } else {
+            p.textContent = value || getEmptyPlaceholder(input.name);
+          }
+          
+          p.className = value ? '' : 'empty';
+          
+          // Reset the input display
+          input.style.display = 'none';
+          p.style.display = 'block';
+          item.classList.remove('editing');
+        });
+        
+        // Add profile picture if exists
+        const savedProfilePic = localStorage.getItem('profilePicture');
+        if (savedProfilePic) {
+          data.profilePicture = savedProfilePic;
+        }
+        
+        console.log('Saving profile data:', data);
+        
+        // Create a local copy of profile data 
+        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+        const updatedUser = {
+          ...storedUser,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          name: data.firstName + (data.lastName ? ' ' + data.lastName : ''),
+          email: data.email,
+          mobileNumber: data.mobileNumber,
+          phone: data.mobileNumber,
+          streetAddress: data.streetAddress,
+          address: data.streetAddress,
+          city: data.city, 
+          state: data.state,
+          pincode: data.pincode,
+          profilePicture: data.profilePicture,
+          dob: data.dob
+        };
+        
+        // Immediately update UI with the data we have
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement && data.firstName) {
+          // Construct display name from the data we just sent
+          let displayName = data.firstName;
+          if (data.lastName) {
+            displayName += ' ' + data.lastName;
+          }
+          userNameElement.textContent = displayName;
+          console.log('Updated username display to:', displayName);
+        }
+        
+        // Always save to localStorage for offline support
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        
+        let serverUpdateSuccess = false;
+        
+        // Try to save to server if online
+        if (isServerOnline) {
+          try {
+            // Get token for authentication
+            const token = localStorage.getItem('token');
+            if (!token) {
+              throw new Error('No auth token available');
+            }
+            
+            // Format data for the basic profile endpoint
+            const basicProfileData = {
+              fullName: data.firstName + (data.lastName ? ' ' + data.lastName : ''),
+              email: data.email,
+              phone: data.mobileNumber,
+              dateOfBirth: data.dob,
+              streetAddress: data.streetAddress,
+              city: data.city,
+              state: data.state,
+              pinCode: data.pincode
+            };
+            
+            // Try the new basic profile endpoint first
+            let response = null;
+            let endpoint = `${API_URL}/profile/basic`;
+            
+            try {
+              response = await fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(basicProfileData)
+              });
+              
+              console.log(`Response from ${endpoint}:`, response.status);
+              
+              // If it fails with a client error, try the regular profile endpoint
+              if (!response.ok && response.status >= 400 && response.status < 500) {
+                console.log('Trying regular profile endpoint...');
+                endpoint = `${API_URL}/profile`;
+                response = await fetch(endpoint, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  },
+                  body: JSON.stringify(data)
+                });
+                console.log(`Response from ${endpoint}:`, response.status);
+              }
+              
+              if (response.ok) {
+                const result = await response.json();
+                console.log('Profile update response:', result);
+                
+                let responseData;
+                if (result.profile) {
+                  responseData = result.profile;
+                } else if (result.user) {
+                  responseData = result.user;
+                } else {
+                  responseData = result;
+                }
+                
+                // Update full profile with server response data
+                updateUserDisplay(responseData);
+                serverUpdateSuccess = true;
+              } else {
+                throw new Error(`Server returned ${response.status}`);
+              }
+            } catch (error) {
+              console.error(`Error with API endpoint ${endpoint}:`, error);
+              throw error;
+            }
+          } catch (error) {
+            console.log('Could not update server, using local data only:', error);
+            // Continue with local data
+          }
+        }
+        
+        // Use local data if server update failed
+        if (!serverUpdateSuccess) {
+          // Update with local data
+          updateUserDisplay(updatedUser);
+        }
+        
+        // Reset the edit button and save button
+        const editButton = container.previousElementSibling.querySelector('.edit-button');
+        editButton.innerHTML = '<i class="fas fa-pen"></i> Edit';
+        container.nextElementSibling.style.display = 'none';
+        
+        showToast('Changes saved successfully!', 'success');
+      } catch (error) {
+        console.error('Error saving changes:', error);
+        showToast('Failed to save changes: ' + error.message, 'error');
+      }
+    }
+
+    // Get placeholder text for empty fields
+    function getEmptyPlaceholder(fieldName) {
+      const placeholders = {
+        'name': 'Enter your name',
+        'email': 'Enter your email',
+        'phone': 'Enter your phone number',
+        'dob': 'Enter your birth date',
+        'street': 'Enter your street address',
+        'city': 'Enter your city',
+        'state': 'Enter your state',
+        'pincode': 'Enter PIN code'
+      };
+      return placeholders[fieldName] || `Enter your ${fieldName}`;
+    }
+
+    // Function to handle profile photo change
+    function handlePhotoChange(event) {
+        const file = event.target.files[0];
+      if (file) {
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+          showToast('Please select an image file', 'error');
+          return;
+        }
+        
+        // Check file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          showToast('Image file is too large. Maximum size is 5MB', 'error');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+          try {
+          const profilePic = document.getElementById('profilePicture');
+          profilePic.src = e.target.result;
+            
+            // Save temporarily to localStorage
+          localStorage.setItem('profilePicture', e.target.result);
+            
+            // Get token for authentication
+            const token = localStorage.getItem('token');
+            if (!token) {
+              showToast('You must be logged in to update profile picture', 'error');
+              return;
+            }
+            
+            // Try to update profile on both endpoints for compatibility
+            let response;
+            
+            // First try the /profile endpoint
+            try {
+              response = await fetch(`${API_URL}/profile`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                  profilePicture: e.target.result
+                })
+              });
+              
+              // If that fails with a non-auth error, try the users/profile endpoint
+              if (!response.ok && response.status !== 401 && response.status !== 403) {
+                response = await fetch(`${API_URL}/users/profile`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  },
+                  body: JSON.stringify({
+                    profilePicture: e.target.result
+                  })
+                });
+              }
+            } catch (error) {
+              console.log('First attempt failed, trying alternative endpoint', error);
+              // Try the alternative endpoint
+              response = await fetch(`${API_URL}/users/profile`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                  profilePicture: e.target.result
+                })
+              });
+            }
+            
+            if (!response.ok) {
+              if (response.status === 401 || response.status === 403) {
+                // Authentication failure - clear token and redirect
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+                return;
+              }
+              
+              throw new Error(`Failed to update profile picture (Status: ${response.status})`);
+            }
+            
+            const result = await response.json();
+            console.log('Profile picture update response:', result);
+            
+            // Update both UI elements showing the profile picture
+            if (profilePic) {
+              profilePic.src = e.target.result;
+            }
+            
+            // Update auth section header
+            const authSection = document.getElementById('auth-section');
+            if (authSection) {
+              const profileImg = authSection.querySelector('img');
+              if (profileImg) {
+                profileImg.src = e.target.result;
+              }
+            }
+            
+          showToast('Profile picture updated!', 'success');
+          } catch (error) {
+            console.error('Error updating profile picture:', error);
+            showToast('Failed to update profile picture: ' + error.message, 'error');
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Initialize profile data
+    async function initializeProfile() {
+      try {
+        // First check if server is online
+        isServerOnline = await checkServerStatus();
+        console.log('Server online status:', isServerOnline);
+        
+        // Check if token exists
+        const token = localStorage.getItem('token');
+        if (!token) {
+          // Redirect to login if no token
+        window.location.href = 'login.html';
+        return;
+      }
+
+        // Try to get profile data from local storage first for immediate display
+        let localUserData = null;
+        try {
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            localUserData = JSON.parse(storedUser);
+            console.log('Using stored user data for initial display:', localUserData);
+            
+            // Display local data immediately while we fetch from server
+            if (localUserData) {
+              updateUserDisplay(localUserData);
+            }
+          }
+        } catch (e) {
+          console.error('Error parsing stored user data:', e);
+        }
+        
+        // If server is offline, just use local data
+        if (!isServerOnline) {
+          console.log('Server is offline, using local data only');
+          if (!localUserData) {
+            showToast('Cannot connect to server and no local data available', 'error');
+          }
+          return;
+        }
+        
+        // Otherwise, try to get server data
+        console.log('Fetching profile data from API...');
+        let profileData = null;
+        let responseStatus = 0;
+        
+        // Try /users/profile endpoint
+        try {
+          const response1 = await fetch(`${API_URL}/users/profile`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          console.log('/users/profile response status:', response1.status);
+          responseStatus = response1.status;
+          
+          if (response1.ok) {
+            const userData = await response1.json();
+            console.log('/users/profile response data:', userData);
+            
+            // Extract profile from response
+            if (userData) {
+              if (userData.profile) profileData = userData.profile;
+              else if (userData.user) profileData = userData.user;
+              else profileData = userData;
+            }
+          } else if (response1.status === 401 || response1.status === 403) {
+            // Token is invalid or expired, redirect to login
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+            return;
+          }
+        } catch (error) {
+          console.error('Error with /users/profile endpoint:', error);
+        }
+        
+        // If first endpoint didn't work, try the /profile endpoint
+        if (!profileData) {
+          try {
+            const response2 = await fetch(`${API_URL}/profile`, {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            console.log('/profile response status:', response2.status);
+            responseStatus = response2.status;
+            
+            if (response2.ok) {
+              const userData = await response2.json();
+              console.log('/profile response data:', userData);
+              
+              // Extract profile from response
+              if (userData) {
+                if (userData.profile) profileData = userData.profile;
+                else if (userData.user) profileData = userData.user;
+                else profileData = userData;
+              }
+            } else if (response2.status === 401 || response2.status === 403) {
+              // Token is invalid or expired, redirect to login
+              localStorage.removeItem('token');
+              window.location.href = 'login.html';
+              return;
+            }
+          } catch (error) {
+            console.error('Error with /profile endpoint:', error);
+          }
+        }
+        
+        // If we got server data, update the UI and local storage
+        if (profileData) {
+          console.log('Using server data to update profile');
+          
+          // Update UI with fresh data
+          updateUserDisplay(profileData);
+          
+          // Also store server data in local storage for future offline use
+          // Merge with existing data to ensure we don't lose any fields
+          try {
+            const existingData = JSON.parse(localStorage.getItem('user') || '{}');
+            const mergedData = { ...existingData, ...profileData };
+            localStorage.setItem('user', JSON.stringify(mergedData));
+          } catch (e) {
+            console.error('Error updating localStorage with server data:', e);
+            localStorage.setItem('user', JSON.stringify(profileData));
+          }
+        } else {
+          console.log('No server data available, keeping local data');
+          
+          // If no server data but we had local data, keep using that
+          if (localUserData) {
+            console.log('Continuing with local data');
+          } else {
+            console.error('No profile data available from server or locally');
+            showToast('Could not load profile data', 'error');
+          }
+        }
+      } catch (error) {
+        console.error('Profile initialization error:', error);
+        showToast(error.message || 'Failed to initialize profile', 'error');
+      }
+    }
+
+    // Improved server status check
+    async function checkServerStatus() {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+        
+        const response = await fetch(`${API_URL}/health`, { 
+          method: 'GET',
+          cache: 'no-store',
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+          console.log('Server is online');
+          return true;
+        } else {
+          console.log('Server returned non-OK status:', response.status);
+          return false;
+        }
+      } catch (error) {
+        console.error('Server connection error:', error);
+        return false;
+      }
+    }
+
+    // Function to update UI with user profile data
+    function updateUserDisplay(profile) {
+      if (!profile) {
+        console.error('No profile data to display');
+        return;
+      }
+      
+      console.log('Updating UI with profile data:', profile);
+      
+      // Store the complete profile data in sessionStorage to persist between page navigations
+      try {
+        // Get existing session data if it exists
+        const existingSessionData = JSON.parse(sessionStorage.getItem('currentProfileData') || '{}');
+        // Merge with new data
+        const mergedData = { ...existingSessionData, ...profile };
+        // Save back to session storage
+        sessionStorage.setItem('currentProfileData', JSON.stringify(mergedData));
+      } catch (e) {
+        console.error('Error saving profile data to session storage:', e);
+      }
+      
+      // Add null checks for all element accesses
+      const userNameElement = document.getElementById('userName');
+      const profilePicElement = document.getElementById('profilePicture');
+      const memberSinceElement = document.getElementById('memberSince');
+      const personalInfo = document.getElementById('personalInfo');
+      
+      // Update profile header with username
+      if (userNameElement) {
+        // Try various available name fields
+        let displayName = 'User';
+        
+        if (profile.username) {
+          displayName = profile.username;
+        } else if (profile.fullName) {
+          displayName = profile.fullName;
+        } else if (profile.firstName || profile.lastName) {
+          displayName = `${profile.firstName || ''} ${profile.lastName || ''}`.trim();
+        } else if (profile.name) {
+          displayName = profile.name;
+        } else if (profile.Auth && profile.Auth.username) {
+          displayName = profile.Auth.username;
+        }
+        
+        console.log('Setting username to:', displayName);
+        userNameElement.textContent = displayName;
+      }
+      
+      // Update member since date
+      if (memberSinceElement) {
+        let createdDate = null;
+        
+        // Try all possible date field names
+        if (profile.createdAt) {
+          createdDate = new Date(profile.createdAt);
+        } else if (profile.created_at) {
+          createdDate = new Date(profile.created_at);
+        } else if (profile.Auth && profile.Auth.created_at) {
+          createdDate = new Date(profile.Auth.created_at);
+        } else if (profile.updatedAt) {
+          createdDate = new Date(profile.updatedAt);
+        } else if (profile.updated_at) {
+          createdDate = new Date(profile.updated_at);
+        } else {
+          // If no date found, use current date
+          createdDate = new Date();
+        }
+        
+        console.log('Member since date:', createdDate);
+        memberSinceElement.textContent = createdDate.toLocaleDateString();
+      }
+      
+      // Update profile picture if exists
+      if (profilePicElement) {
+        if (profile.profilePicture) {
+          profilePicElement.src = profile.profilePicture;
+          // Also update localStorage to keep it in sync
+          localStorage.setItem('profilePicture', profile.profilePicture);
+        } else {
+          // Try to get from localStorage
+          const savedPic = localStorage.getItem('profilePicture');
+          if (savedPic) {
+            profilePicElement.src = savedPic;
+          }
+        }
+      }
+      
+      // Only proceed with updating fields if the container exists
+      if (personalInfo) {
+        // Name (combined first and last name)
+        const nameField = personalInfo.querySelector('[name="name"] + p');
+        if (nameField) {
+          // First try fullName from basic profile, then try firstName/lastName
+          const fullName = profile.fullName || 
+                         `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 
+                         profile.name || '';
+          
+          nameField.textContent = fullName || 'Enter your name';
+          nameField.className = fullName ? '' : 'empty';
+          
+          // Also update the input field value for when edit mode is activated
+          const nameInput = personalInfo.querySelector('[name="name"]');
+          if (nameInput) {
+            nameInput.value = fullName;
+          }
+        }
+        
+        // Email
+        const emailField = personalInfo.querySelector('[name="email"] + p');
+        if (emailField) {
+          // Try to get email from profile or Auth object
+          const email = profile.email || (profile.Auth ? profile.Auth.email : '') || '';
+          emailField.textContent = email || 'Enter your email';
+          emailField.className = email ? '' : 'empty';
+          
+          // Also update the input field
+          const emailInput = personalInfo.querySelector('[name="email"]');
+          if (emailInput) {
+            emailInput.value = email;
+          }
+        }
+        
+        // Phone
+        const phoneField = personalInfo.querySelector('[name="phone"] + p');
+        if (phoneField) {
+          const phone = profile.phone || profile.mobileNumber || '';
+          phoneField.textContent = phone || 'Enter your phone number';
+          phoneField.className = phone ? '' : 'empty';
+          
+          // Also update the input field
+          const phoneInput = personalInfo.querySelector('[name="phone"]');
+          if (phoneInput) {
+            phoneInput.value = phone;
+          }
+        }
+        
+        // Date of Birth
+        const dobField = personalInfo.querySelector('[name="dob"] + p');
+        if (dobField) {
+          // Try both dateOfBirth (from basic profile) and dob (from regular profile)
+          if (profile.dateOfBirth || profile.dob) {
+            const dobValue = profile.dateOfBirth || profile.dob;
+            dobField.textContent = new Date(dobValue).toLocaleDateString();
+            dobField.className = '';
+            
+            // Also update the input field
+            const dobInput = personalInfo.querySelector('[name="dob"]');
+            if (dobInput) {
+              // Format as YYYY-MM-DD for the date input
+              const date = new Date(dobValue);
+              const formatted = date.toISOString().split('T')[0];
+              dobInput.value = formatted;
+            }
+          } else {
+            dobField.textContent = 'Enter your birth date';
+            dobField.className = 'empty';
+          }
+        }
+        
+        // Street Address
+        const streetField = personalInfo.querySelector('[name="street"] + p');
+        if (streetField) {
+          const address = profile.streetAddress || profile.address || '';
+          streetField.textContent = address || 'Enter your street address';
+          streetField.className = address ? '' : 'empty';
+          
+          // Also update the input field
+          const streetInput = personalInfo.querySelector('[name="street"]');
+          if (streetInput) {
+            streetInput.value = address;
+          }
+        }
+        
+        // City
+        const cityField = personalInfo.querySelector('[name="city"] + p');
+        if (cityField) {
+          const city = profile.city || '';
+          cityField.textContent = city || 'Enter your city';
+          cityField.className = city ? '' : 'empty';
+          
+          // Also update the input field
+          const cityInput = personalInfo.querySelector('[name="city"]');
+          if (cityInput) {
+            cityInput.value = city;
+          }
+        }
+        
+        // State
+        const stateField = personalInfo.querySelector('[name="state"] + p');
+        if (stateField) {
+          const state = profile.state || '';
+          stateField.textContent = state || 'Enter your state';
+          stateField.className = state ? '' : 'empty';
+          
+          // Also update the input field
+          const stateInput = personalInfo.querySelector('[name="state"]');
+          if (stateInput) {
+            stateInput.value = state;
+          }
+        }
+        
+        // PIN Code - check both pinCode (from basic profile) and pincode (from regular profile)
+        const pincodeField = personalInfo.querySelector('[name="pincode"] + p');
+        if (pincodeField) {
+          const pincode = profile.pinCode || profile.pincode || '';
+          pincodeField.textContent = pincode || 'Enter PIN code';
+          pincodeField.className = pincode ? '' : 'empty';
+          
+          // Also update the input field
+          const pincodeInput = personalInfo.querySelector('[name="pincode"]');
+          if (pincodeInput) {
+            pincodeInput.value = pincode;
+          }
+        }
+      }
+      
+      // Update the auth section header
+      updateAuthSection(profile);
+    }
+
+    // Fetch profile data from backend
+    async function fetchProfileData() {
+      try {
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+          window.location.href = 'login.html';
+          return null;
+        }
+        
+        console.log('Fetching profile data from server...');
+        
+        // First try the new basic profile endpoint
+        const response = await fetch(`${API_URL}/profile/basic`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            // Token expired or invalid
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+            return null;
+          }
+          
+          // If basic profile endpoint fails, try the regular profile endpoint
+          const regularResponse = await fetch(`${API_URL}/profile`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (!regularResponse.ok) {
+            const errorData = await regularResponse.json();
+            throw new Error(errorData.message || `HTTP error! status: ${regularResponse.status}`);
+          }
+          
+          const result = await regularResponse.json();
+          console.log('Regular profile data received:', result);
+          return result.profile;
+        }
+        
+        const result = await response.json();
+        console.log('Basic profile data received:', result);
+        return result.profile;
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        showToast('Failed to load profile data: ' + error.message, 'error');
+        return null;
+      }
+    }
+
+    // Update the auth section header with profile data
+    function updateAuthSection(profile) {
+      if (!profile) {
+        console.log('No profile data for auth section');
+        // Try to get from localStorage as fallback
+        try {
+          const user = JSON.parse(localStorage.getItem('user') || '{}');
+          if (user && Object.keys(user).length > 0) {
+            profile = user;
+          }
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+        
+        if (!profile) return;
+      }
+      
+      const authSection = document.getElementById('auth-section');
+      if (!authSection) {
+        console.error('Auth section element not found');
+        return;
+      }
+      
+      console.log('Updating auth section with profile data:', profile);
+      
+      const token = localStorage.getItem('token');
+      
+      if (token) {
+        // Get display name from various sources
+        let displayName = 'User';
+        
+        if (profile.username) {
+          displayName = profile.username;
+        } else if (profile.fullName) {
+          displayName = profile.fullName;
+        } else if (profile.firstName || profile.lastName) {
+          displayName = `${profile.firstName || ''} ${profile.lastName || ''}`.trim();
+        } else if (profile.name) {
+          displayName = profile.name;
+        } else if (profile.Auth && profile.Auth.username) {
+          displayName = profile.Auth.username;
+        }
+        
+        // Get profile picture from various sources
+        let profilePic = 'images/userlogo.png';
+        if (profile.profilePicture) {
+          profilePic = profile.profilePicture;
+        } else {
+          // Try to get from localStorage
+          const savedPic = localStorage.getItem('profilePicture');
+          if (savedPic) {
+            profilePic = savedPic;
+          }
+        }
+        
+        console.log('Auth section display name:', displayName);
+        console.log('Auth section profile pic:', profilePic ? 'Yes (not shown)' : 'No');
+        
+        authSection.innerHTML = `
+          <div class="user-profile">
+            <div class="user-profile-button" onclick="toggleUserDropdown(event)">
+              <img src="${profilePic}" alt="User" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 8px;">
+              <span style="color: var(--text-dark); font-weight: 500;">${displayName}</span>
+              <i class="fas fa-chevron-down" style="margin-left: 5px;"></i>
+            </div>
+            <div class="dropdown-menu" id="userDropdown">
+              <ul>
+                <li>
+                  <a href="profile.html" class="active">
+                    <i class="fas fa-user"></i>
+                    Profile
+                  </a>
+                </li>
+                <li>
+                  <a href="wishlist.html">
+                    <i class="fas fa-heart"></i>
+                    Wishlist
+                  </a>
+                </li>
+                <li>
+                  <a href="cart.html">
+                    <i class="fas fa-shopping-cart"></i>
+                    Cart
+                  </a>
+                </li>
+                <li>
+                  <a href="settings.html">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                  </a>
+                </li>
+                <li class="dropdown-divider"></li>
+                <li>
+                  <button onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        `;
+      } else {
+        console.log('No token, redirecting to login');
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Toggle user dropdown menu
+    function toggleUserDropdown(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      const dropdown = document.getElementById('userDropdown');
+      if (dropdown) {
+        dropdown.classList.toggle('show');
+      }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+      const dropdown = document.getElementById('userDropdown');
+      if (dropdown && !event.target.closest('.user-profile')) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    // Function to handle logout
+    function handleLogout() {
+      try {
+        // Try to call logout API
+        const token = localStorage.getItem('token');
+        if (token) {
+          fetch(`${API_URL}/auth/logout`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }).catch(err => console.log('Logout API call failed:', err));
+        }
+      } catch (e) {
+        console.log('Error during logout process:', e);
+      } finally {
+        // Always clear local data regardless of API success
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('profilePicture');
+        
+        // Clear cart and wishlist if functions exist
+        if (window.clearLocalCart) {
+          window.clearLocalCart();
+        } else {
+          localStorage.removeItem('cartItems');
+        }
+        
+        if (window.clearLocalWishlist) {
+            window.clearLocalWishlist();
+        } else {
+            localStorage.removeItem('wishlistItems');
+        }
+        
+        // Redirect to login page
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Add event listener to initialize profile on page load and restore data
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // Apply theme on DOM content load
+        applySavedTheme();
+        
+        // First try to load data from sessionStorage (for quicker display)
+        try {
+          const sessionData = sessionStorage.getItem('currentProfileData');
+          if (sessionData) {
+            const profileData = JSON.parse(sessionData);
+            console.log('Restoring profile data from session storage:', profileData);
+            // Apply data to the UI immediately
+            updateUserDisplay(profileData);
+          } else {
+            // If no session data, try localStorage
+            const localData = localStorage.getItem('user');
+            if (localData) {
+              const userData = JSON.parse(localData);
+              console.log('Using localStorage data for initial display:', userData);
+              updateUserDisplay(userData);
+            }
+          }
+        } catch (e) {
+          console.error('Error restoring from storage:', e);
+        }
+        
+        // Set placeholders to make it clear data can be entered
+        setEmptyFieldPlaceholders();
+        
+        // Then fully initialize profile data (which will update if server is available)
+        await initializeProfile();
+        
+        // Listen for system theme changes if using system theme
+        const settings = JSON.parse(localStorage.getItem('ecomart-settings')) || {};
+        if (settings.appearance && settings.appearance.theme === 'system') {
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            const prefersDarkMode = e.matches;
+            if (prefersDarkMode) {
+              document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+              document.documentElement.removeAttribute('data-theme');
+            }
+          });
+        }
+
+        // Also load orders 
+        loadUserOrders();
+        
+        // Add event handler for page unload to save current state
+        window.addEventListener('beforeunload', () => {
+          // We already store to sessionStorage in updateUserDisplay
+          console.log('Saving profile state before page unload');
+        });
+      } catch (error) {
+        console.error('Error initializing page:', error);
+        showToast('Failed to initialize page: ' + error.message, 'error');
+      }
+    });
+
+    // Helper function to set visual cues for empty fields
+    function setEmptyFieldPlaceholders() {
+      const personalInfo = document.getElementById('personalInfo');
+      if (!personalInfo) return;
+      
+      const infoItems = personalInfo.querySelectorAll('.info-item');
+      infoItems.forEach(item => {
+        const p = item.querySelector('p');
+        if (!p) return;
+        
+        // Check if the field is empty
+        const placeholderText = getEmptyPlaceholder(item.querySelector('input')?.name || '');
+        if (p.textContent === placeholderText) {
+          p.className = 'empty';
+        } else if (p.textContent.trim()) {
+          p.className = '';
+        }
+      });
+    }
+
+    // Load user orders
+    async function loadUserOrders() {
+      // Create orders container if it doesn't exist
+      let ordersContainer = document.getElementById('orders-container');
+      if (!ordersContainer) {
+        // Check if we need to create the orders section in the profile-main
+        const profileMain = document.querySelector('.profile-main .profile-sections');
+        if (profileMain) {
+          const ordersSection = document.createElement('div');
+          ordersSection.className = 'profile-section';
+          ordersSection.innerHTML = `
+            <div class="section-header">
+              <h2><i class="fas fa-shopping-bag"></i> My Orders</h2>
+            </div>
+            <div id="orders-container">
+              <p class="text-center">Loading your orders...</p>
+            </div>
+          `;
+          profileMain.appendChild(ordersSection);
+          ordersContainer = document.getElementById('orders-container');
+        } else {
+          console.error('Profile main section not found');
+          return;
+        }
+      }
+
+      if (!isServerOnline) {
+        ordersContainer.innerHTML = '<p class="text-center">Cannot load orders while offline</p>';
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          ordersContainer.innerHTML = '<p class="text-center">Please log in to view your orders</p>';
+          return;
+        }
+
+        ordersContainer.innerHTML = '<p class="text-center">Loading your orders...</p>';
+
+        const response = await fetch(`${API_URL}/orders/user`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          await handleApiError(response, 'Failed to fetch orders');
+          ordersContainer.innerHTML = '<p class="text-center">Could not load your orders</p>';
+          return;
+        }
+
+        const orders = await response.json();
+        
+        if (!orders || !orders.length) {
+          ordersContainer.innerHTML = '<p class="text-center">You haven\'t placed any orders yet</p>';
+          return;
+        }
+
+        // Sort orders by date (most recent first)
+        orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+        
+        // Generate order HTML
+        let ordersHTML = '';
+        
+        orders.forEach(order => {
+          const orderDate = order.orderDate ? new Date(order.orderDate).toLocaleDateString() : 'N/A';
+          const itemCount = order.items ? order.items.length : 0;
+          const totalAmount = order.totalAmount ? `$${order.totalAmount.toFixed(2)}` : 'N/A';
+          const status = order.status || 'Processing';
+          const orderId = order._id || order.id;
+          
+          ordersHTML += `
+            <div class="order-card">
+              <div class="order-header">
+                <h4>Order #${orderId}</h4>
+                <span class="order-date">${orderDate}</span>
+              </div>
+              <div class="order-details">
+                <p><strong>Status:</strong> <span class="status-${status.toLowerCase()}">${status}</span></p>
+                <p><strong>Items:</strong> ${itemCount}</p>
+                <p><strong>Total:</strong> ${totalAmount}</p>
+              </div>
+              <button class="btn-primary" onclick="showOrderDetails('${orderId}')">View Details</button>
+            </div>
+          `;
+        });
+        
+        ordersContainer.innerHTML = ordersHTML;
+      } catch (error) {
+        console.error('Error loading orders:', error);
+        const ordersContainer = document.getElementById('orders-container');
+        if (ordersContainer) {
+          ordersContainer.innerHTML = '<p class="text-center">Error loading your orders</p>';
+        }
+      }
+    }
+
+    // Show a modal dialog with the given title and content
+    function showModal(title, content) {
+      // Create modal container if it doesn't exist
+      let modalContainer = document.getElementById('modal-container');
+      if (!modalContainer) {
+        modalContainer = document.createElement('div');
+        modalContainer.id = 'modal-container';
+        document.body.appendChild(modalContainer);
+      }
+      
+      // Construct modal HTML
+      modalContainer.innerHTML = `
+        <div class="modal-overlay">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>${title}</h3>
+              <button class="modal-close" onclick="hideModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+              ${content}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Display modal
+      modalContainer.style.display = 'block';
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+      
+      // Add event listener to close modal when clicking outside
+      modalContainer.querySelector('.modal-overlay').addEventListener('click', (e) => {
+        if (e.target === modalContainer.querySelector('.modal-overlay')) {
+          hideModal();
+        }
+      });
+    }
+
+    // Hide the modal dialog
+    function hideModal() {
+      const modalContainer = document.getElementById('modal-container');
+      if (modalContainer) {
+        modalContainer.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scrolling
+      }
+    }
+
+    // Show detailed order information in a modal
+    async function showOrderDetails(orderId) {
+      if (!isServerOnline) {
+        showToast('Cannot load order details while offline', 'error');
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          showToast('Please log in to view order details', 'error');
+          return;
+        }
+
+        const response = await fetch(`${API_URL}/orders/${orderId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          await handleApiError(response, 'Failed to fetch order details');
+          return;
+        }
+
+        const order = await response.json();
+        
+        // Generate the HTML content for the order details
+        let itemsHtml = `
+          <table class="order-items-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        
+        let subtotal = 0;
+        order.items.forEach(item => {
+          const itemTotal = item.price * item.quantity;
+          subtotal += itemTotal;
+          
+          itemsHtml += `
+            <tr>
+              <td>${item.name}</td>
+              <td>${item.quantity}</td>
+              <td>$${item.price.toFixed(2)}</td>
+              <td>$${itemTotal.toFixed(2)}</td>
+            </tr>
+          `;
+        });
+        
+        itemsHtml += `
+            </tbody>
+          </table>
+        `;
+        
+        // Calculate other costs
+        const tax = subtotal * 0.05; // Assuming 5% tax
+        const shipping = order.shippingFee || 5.99;
+        const total = subtotal + tax + shipping;
+        
+        const addressHtml = `
+          <div class="address-section">
+            <div class="section-title">Shipping Address</div>
+            <div>${order.shippingAddress?.name || ''}</div>
+            <div>${order.shippingAddress?.street || ''}</div>
+            <div>${order.shippingAddress?.city || ''}, ${order.shippingAddress?.state || ''} ${order.shippingAddress?.zip || ''}</div>
+            <div>${order.shippingAddress?.country || ''}</div>
+          </div>
+        `;
+        
+        const paymentHtml = `
+          <div class="payment-section">
+            <div class="section-title">Payment Information</div>
+            <div>Method: ${order.paymentMethod || 'Standard payment'}</div>
+            <div>Status: ${order.paymentStatus || 'Paid'}</div>
+          </div>
+        `;
+        
+        const summaryHtml = `
+          <div class="order-summary">
+            <div class="summary-row">
+              <span>Subtotal:</span>
+              <span>$${subtotal.toFixed(2)}</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping:</span>
+              <span>$${shipping.toFixed(2)}</span>
+            </div>
+            <div class="summary-row">
+              <span>Tax (5%):</span>
+              <span>$${tax.toFixed(2)}</span>
+            </div>
+            <div class="summary-row summary-total">
+              <span>Total:</span>
+              <span>$${total.toFixed(2)}</span>
+            </div>
+          </div>
+        `;
+        
+        const orderStatusHtml = `
+          <div class="order-status">
+            <div class="section-title">Order Status</div>
+            <div>Status: ${order.status || 'Processing'}</div>
+            <div>Order Date: ${new Date(order.orderDate).toLocaleDateString()}</div>
+            <div>Estimated Delivery: ${order.estimatedDelivery ? new Date(order.estimatedDelivery).toLocaleDateString() : 'Not available'}</div>
+          </div>
+        `;
+        
+        const content = `
+          ${orderStatusHtml}
+          ${itemsHtml}
+          ${summaryHtml}
+          ${addressHtml}
+          ${paymentHtml}
+        `;
+        
+        showModal(`Order #${order._id || orderId}`, content);
+        
+      } catch (error) {
+        console.error('Error loading order details:', error);
+        showToast(error.message || 'Failed to load order details', 'error');
+      }
+    }
+  </script>
+</body>
+</html>

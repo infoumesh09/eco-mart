@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Offers - Eco Mart</title>
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .offers-container {
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .offers-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .offers-header h1 {
+            color: var(--text-dark);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .offers-header p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .offer-card {
+            background: var(--background-white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .offer-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .offer-card:hover .offer-image {
+            transform: scale(1.05);
+        }
+
+        .offer-content {
+            padding: 1.5rem;
+        }
+
+        .offer-title {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .offer-description {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .offer-discount {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .offer-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .offer-validity {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .coupon-code {
+            background: var(--background-light);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 1rem;
+            color: var(--primary-color);
+            border: 1px dashed var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .coupon-code:hover {
+            background: var(--primary-color);
+            color: var(--background-white);
+        }
+
+        @media (max-width: 768px) {
+            .offers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .limited-offer-banner {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        /* User Profile Button Styles */
+        .user-profile {
+            position: relative;
+        }
+
+        .user-profile-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile-button:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .user-profile-button img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-profile-button span {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .user-profile-button i {
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+
+        .user-profile-button.active i {
+            transform: rotate(180deg);
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            width: 200px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown-menu li {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-menu li:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu li a,
+        .dropdown-menu li button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu li a:hover,
+        .dropdown-menu li button:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+        }
+
+        .dropdown-menu li i {
+            color: var(--text-light);
+            width: 1rem;
+            text-align: center;
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid #eee;
+            margin: 0.5rem 0;
+        }
+
+        /* User Dropdown Menu Styles */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-dark, #333);
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .dropdown-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .user-name {
+            font-weight: 500;
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-color, #2E7D32);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--text-dark, #333);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="main-nav container">
+            <a href="newhome.html" class="logo">
+                <img src="images/newlogo.png" alt="Eco Mart Logo" height="30">
+            </a>
+            <div class="nav-links">
+                <a href="newhome.html"><i class="fas fa-home"></i> Home</a>
+                <a href="shop.html"><i class="fas fa-store"></i> Shop</a>
+                <a href="category.html"><i class="fas fa-th-large"></i> Categories</a>
+                <a href="offers.html" class="active"><i class="fas fa-tag"></i> Offers</a>
+                <a href="wishlist.html"><i class="fas fa-heart"></i> Wishlist</a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+            </div>
+            <div id="auth-section">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </nav>
+    </header>
+
+    <main class="container offers-container">
+        <div class="offers-header">
+            <h1>Special Offers</h1>
+            <p>Discover amazing deals on our eco-friendly products and save while shopping sustainably.</p>
+        </div>
+
+        <div class="offers-grid">
+            <div class="offer-card">
+                <img src="images/beauty2.jpeg" alt="New User Offer" class="offer-image">
+                <div class="offer-content">
+                    <h2 class="offer-title">New User Special</h2>
+                    <p class="offer-description">Get 20% off on your first purchase! Welcome to the eco-friendly community.</p>
+                    <div class="offer-discount">20% OFF</div>
+                    <div class="offer-meta">
+                        <span class="offer-validity">Valid until: Apr 30, 2024</span>
+                        <span class="coupon-code" onclick="copyCode('NEWECO20')">NEWECO20</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="offer-card">
+                <img src="images/bathroom.jpeg" alt="Bundle Offer" class="offer-image">
+                <div class="offer-content">
+                    <h2 class="offer-title">Bathroom Bundle</h2>
+                    <p class="offer-description">Save 25% when you buy our complete bathroom essentials bundle.</p>
+                    <div class="offer-discount">25% OFF</div>
+                    <div class="offer-meta">
+                        <span class="offer-validity">Valid until: Apr 15, 2024</span>
+                        <span class="coupon-code" onclick="copyCode('BUNDLE25')">BUNDLE25</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="offer-card">
+                <img src="images/kitchen.jpeg" alt="Kitchen Offer" class="offer-image">
+                <div class="offer-content">
+                    <h2 class="offer-title">Kitchen Essentials</h2>
+                    <p class="offer-description">Get 15% off on all kitchen products. Make your kitchen eco-friendly!</p>
+                    <div class="offer-discount">15% OFF</div>
+                    <div class="offer-meta">
+                        <span class="offer-validity">Valid until: Apr 20, 2024</span>
+                        <span class="coupon-code" onclick="copyCode('KITCHEN15')">KITCHEN15</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Eco Mart</h3>
+                    <p>Your one-stop shop for sustainable and eco-friendly products.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="shipping.html">Shipping Info</a></li>
+                        <li><a href="returns.html">Returns</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: support@ecomart.com</li>
+                        <li>Phone: (555) 123-4567</li>
+                        <li>Address: 123 Green Street</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <p>&copy; 2024 Eco Mart. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Offers page loaded');
+            
+            // Update auth section
+            updateAuthSection();
+        });
+
+        // Function to update auth section based on login state
+        function updateAuthSection() {
+            const authSection = document.getElementById('auth-section');
+            
+            if (!authSection) {
+                console.warn('Auth section not found in the navigation. Make sure your HTML contains an element with id="auth-section".');
+                return;
+            }
+            
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (token) {
+                // User is logged in
+                const displayName = user.username || user.name || user.email || 'User';
+                const userInitial = displayName.charAt(0).toUpperCase();
+                
+                // Create user dropdown for authenticated users
+                authSection.innerHTML = `
+                    <div class="user-dropdown">
+                        <button class="dropdown-button">
+                            <span class="user-name">${displayName}</span>
+                            <div class="user-avatar">${userInitial}</div>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            <a href="orders.html"><i class="fas fa-shopping-bag"></i> Orders</a>
+                            <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+                            <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listener to logout button
+                const logoutBtn = document.getElementById('logout-btn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        handleLogout();
+                    });
+                }
+                
+                // Add event listener to toggle dropdown
+                const dropdownButton = authSection.querySelector('.dropdown-button');
+                const dropdownContent = authSection.querySelector('.dropdown-content');
+                
+                if (dropdownButton && dropdownContent) {
+                    dropdownButton.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        dropdownContent.classList.toggle('show');
+                    });
+                    
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(event) {
+                        if (!event.target.closest('.user-dropdown')) {
+                            dropdownContent.classList.remove('show');
+                        }
+                    });
+                }
+            } else {
+                // User is not logged in
+                authSection.innerHTML = `
+                    <a href="login.html" class="btn btn-primary">Login</a>
+                    <a href="register.html" class="btn btn-secondary">Register</a>
+                `;
+            }
+        }
+
+        // Function to handle logout
+        function handleLogout() {
+            // Backup wishlist items before logout if they exist
+            const wishlistItems = localStorage.getItem('wishlistItems');
+            if (wishlistItems) {
+                console.log('Backing up wishlist items before logout');
+                localStorage.setItem('wishlistItemsBackup', wishlistItems);
+            }
+            
+            // Clear all user-related data
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            
+            // Clear cart and wishlist data
+            if (window.clearLocalCart) {
+                window.clearLocalCart();
+            } else {
+                localStorage.removeItem('cartItems');
+            }
+            
+            if (window.clearLocalWishlist) {
+                window.clearLocalWishlist();
+            } else {
+                localStorage.removeItem('wishlistItems');
+            }
+            
+            console.log('User logged out, cleared all local data');
+            
+            // Try to call API logout if available
+            try {
+                const API_URL = 'http://localhost:3000/api';
+                fetch(`${API_URL}/auth/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                }).catch(err => console.log('Logout API call failed:', err));
+            } catch (e) {
+                console.log('Could not perform API logout:', e);
+            }
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+
+        // Copy coupon code to clipboard
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const toast = document.createElement('div');
+                toast.className = 'toast toast-success';
+                toast.textContent = `Coupon code ${code} copied to clipboard!`;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }).catch(err => {
+                console.error('Failed to copy code:', err);
+                const toast = document.createElement('div');
+                toast.className = 'toast toast-error';
+                toast.textContent = 'Failed to copy code. Please try again.';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            });
+        }
+    </script>
+</body>
+</html>
