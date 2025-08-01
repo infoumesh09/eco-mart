@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="forgot-password-box">
+            <h1 style="color:rgb(38, 156, 38)">Forgot Password<br><br></h1>
+            <p style="color:rgb(38, 156, 38)">Enter your email address to reset your password.<br><br></p>
+            <form action="/reset-password" method="POST">
+                <label for="email" style="color:rgb(38, 156, 38)">Email Address<br></label>
+                <input type="email" id="email" name="email" required><br><br>
+                <button type="submit"><a href="login.html">Reset Password</button></a>
+            </form>
+            <a href="./login.html" class="back-to-login">Back to Login</a>
+        </div>
+    </div>
+    <script>
+        
+    document.getElementById('forgot-password-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const email = document.getElementById('email').value;
+    const errorMessage = document.getElementById('error-message');
+    const successMessage = document.getElementById('success-message');
+
+    // Simple validation
+    if (email === "") {
+        errorMessage.textContent = "Please enter your email.";
+        successMessage.textContent = ""; // Clear success message
+        return;
+    }
+
+    // Regex for validating email format
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        errorMessage.textContent = "Please enter a valid email address.";
+        successMessage.textContent = ""; // Clear success message
+        return;
+    }
+
+    // Simulated password reset process
+    successMessage.textContent = `A password reset link has been sent to ${email}.`;
+    errorMessage.textContent = ""; // Clear previous error messages
+    // Here you would typically send a request to your server to process the reset
+    // For example:
+    // fetch('/api/reset-password', { method: 'POST', body: JSON.stringify({ email }) })
+});
+
+
+    </script>
+</body>
+</html>

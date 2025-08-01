@@ -1,0 +1,86 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e8f5e9; /* Light green background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #ffffff; /* White background for the form container */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.logo h1 {
+    color: #2e7d32; /* Dark green for the logo text */
+    margin-bottom: 20px;
+}
+
+.login-form h2 {
+    margin-bottom: 20px;
+    color: #2e7d32; /* Dark green for the form heading */
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #388e3c; /* Medium green for labels */
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #c8e6c9; /* Light green border for input fields */
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4caf50; /* Green background for the button */
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #388e3c; /* Darker green on hover */
+}
+
+.forgot-password {
+    margin-top: 10px;
+}
+
+.forgot-password a {
+    color: #4caf50; /* Green color for the link */
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+a{
+    color:white;
+}
+.login-link{
+    padding-top: 10px;
+    color: black;
+}

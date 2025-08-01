@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Eco Mart</title>
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Include header styles -->
+    <link rel="stylesheet" href="components/header.css">
+    <style>
+        /* Update color variables to match theme */
+        :root {
+            --primary: #0d7b13;
+            --accent: #388E3C;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --background-light: #F9FAFB;
+            --success: #059669;
+            --error: #DC2626;
+        }
+
+        .shop-container {
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group h3 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .filter-option:hover {
+            color: var(--text-dark);
+        }
+
+        .filter-option input[type="checkbox"] {
+            accent-color: var(--primary);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* 1:1 Aspect Ratio */
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            background: white;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .product-price {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .shop-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .shop-header h1 {
+            color: var(--text-dark);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .shop-header p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .shop-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .shop-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                position: sticky;
+                top: 90px;
+            }
+        }
+
+        /* Wishlist button styles */
+        .wishlist-btn {
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 40px;
+            height: 40px;
+        }
+        
+        .wishlist-btn:hover {
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        
+        .wishlist-btn i {
+            color: #aaa;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .wishlist-btn:hover i {
+            color: #ff4757;
+        }
+        
+        .wishlist-btn.in-wishlist i,
+        .wishlist-btn i.in-wishlist {
+            color: #ff4757;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: auto;
+            flex-wrap: wrap;
+        }
+        
+        /* For the first 3 products with View Details button */
+        .product-actions .btn-secondary {
+            flex: 0 0 auto;
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.75rem 1rem;
+        }
+        
+        .product-actions .btn-primary {
+            flex: 1;
+            font-size: 0.9rem;
+            padding: 0.75rem 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: rgb(240, 222, 222);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Toast styles - using !important to override conflicting styles */
+        .toast {
+            position: fixed !important;
+            top: 20px !important;
+            right: 20px !important;
+            padding: 8px 16px !important;
+            background: var(--success) !important;
+            color: white !important;
+            border-radius: 4px !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            z-index: 1000 !important;
+            font-size: 14px !important;
+            line-height: 1.2 !important;
+            animation: slideIn 0.5s ease-out !important;
+            pointer-events: none !important;
+            max-height: 40px !important;
+            display: flex !important;
+            align-items: center !important;
+            margin: 0 !important;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .toast.success {
+            background-color: var(--success);
+        }
+
+        .toast.error {
+            background-color: var(--error);
+        }
+
+        /* Auth button styles */
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .auth-buttons .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .auth-buttons .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .auth-buttons .btn-primary:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .auth-buttons .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .auth-buttons .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Update header styles */
+        .main-header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .auth-buttons .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Update navigation styles */
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+            background: rgba(46, 125, 50, 0.1);
+        }
+
+        /* User Dropdown Menu Styles */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-dark, #333);
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .dropdown-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .user-name {
+            font-weight: 500;
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-color, #2E7D32);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--text-dark, #333);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <nav class="main-nav container">
+            <a href="newhome.html" class="logo">
+                <img src="images/newlogo.png" alt="Eco Mart Logo" height="30">
+            </a>
+            <div class="nav-links">
+                <a href="newhome.html"><i class="fas fa-home"></i> Home</a>
+                <a href="shop.html" class="active"><i class="fas fa-store"></i> Shop</a>
+                <a href="category.html"><i class="fas fa-th-large"></i> Categories</a>
+                <a href="offers.html"><i class="fas fa-tag"></i> Offers</a>
+                <a href="wishlist.html"><i class="fas fa-heart"></i> Wishlist</a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+            </div>
+            <div id="auth-section">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </nav>
+    </header>
+
+    <main class="container shop-container">
+        <div class="shop-header">
+            <h1>Eco-Friendly Products</h1>
+            <p>Discover our collection of sustainable and environmentally conscious products.</p>
+        </div>
+
+        <div class="shop-layout">
+            <aside class="filters">
+                <div class="filter-group">
+                    <h3>Categories</h3>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="checkbox" name="category" value="home-kitchen">
+                            Home & Kitchen
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="category" value="bathroom">
+                            Bathroom
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="category" value="cleaning">
+                            Cleaning
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="category" value="personal-care">
+                            Personal Care
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="category" value="kids">
+                            Kids
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="category" value="pets">
+                            Pet Care
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3>Price Range</h3>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="checkbox" name="price" value="0-500">
+                            ₹0 - ₹500
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="price" value="501-1000">
+                            ₹501 - ₹1000
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="price" value="1001-2000">
+                            ₹1001 - ₹2000
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" name="price" value="2000+">
+                            ₹2000+
+                        </label>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="products-grid" id="products-container">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Eco Mart</h3>
+                    <p>Your one-stop shop for sustainable and eco-friendly products.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="shipping.html">Shipping Info</a></li>
+                        <li><a href="returns.html">Returns</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: support@ecomart.com</li>
+                        <li>Phone: (555) 123-4567</li>
+                        <li>Address: 123 Green Street</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <p>&copy; 2024 Eco Mart. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast notification container -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Include cart.js with error handling -->
+    <script>
+        // Check if cart.js fails to load
+        window.addEventListener('error', function(event) {
+            if (event.target.tagName === 'SCRIPT' && event.target.src.includes('cart.js')) {
+                console.error('Error loading cart.js, using fallback functions');
+                // The fallback functions will be used instead
+            }
+        }, true);
+    </script>
+    <script src="scripts/cart.js"></script>
+    <script>
+        // Function to show toast notification
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Function to update the auth section based on login status
+        function updateAuthSection() {
+            // Find auth section
+            const authSection = document.getElementById('auth-section');
+            
+            if (!authSection) {
+                console.warn('Auth section not found in the navigation. Make sure your HTML contains an element with id="auth-section".');
+                return;
+            }
+            
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (token) {
+                // User is logged in
+                const displayName = user.username || user.name || user.email || 'User';
+                const userInitial = displayName.charAt(0).toUpperCase();
+                
+                // Create user dropdown for authenticated users
+                authSection.innerHTML = `
+                    <div class="user-dropdown">
+                        <button class="dropdown-button">
+                            <span class="user-name">${displayName}</span>
+                            <div class="user-avatar">${userInitial}</div>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            <a href="orders.html"><i class="fas fa-shopping-bag"></i> Orders</a>
+                            <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+                            <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listener to logout button
+                const logoutBtn = document.getElementById('logout-btn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        handleLogout();
+                    });
+                }
+                
+                // Add event listener to toggle dropdown
+                const dropdownButton = authSection.querySelector('.dropdown-button');
+                const dropdownContent = authSection.querySelector('.dropdown-content');
+                
+                if (dropdownButton && dropdownContent) {
+                    dropdownButton.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        dropdownContent.classList.toggle('show');
+                    });
+                    
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(event) {
+                        if (!event.target.closest('.user-dropdown')) {
+                            dropdownContent.classList.remove('show');
+                        }
+                    });
+                }
+            } else {
+                // User is not logged in
+                authSection.innerHTML = `
+                    <a href="login.html" class="btn btn-primary">Login</a>
+                    <a href="register.html" class="btn btn-secondary">Register</a>
+                `;
+            }
+        }
+
+        // Function to handle logout
+        function handleLogout() {
+            // Backup wishlist items before logout if they exist
+            const wishlistItems = localStorage.getItem('wishlistItems');
+            if (wishlistItems) {
+                console.log('Backing up wishlist items before logout');
+                localStorage.setItem('wishlistItemsBackup', wishlistItems);
+            }
+            
+            // Clear all user-related data
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            
+            // Clear cart and wishlist data
+            if (window.clearLocalCart) {
+                window.clearLocalCart();
+            } else {
+                localStorage.removeItem('cartItems');
+            }
+            
+            if (window.clearLocalWishlist) {
+                window.clearLocalWishlist();
+            } else {
+                localStorage.removeItem('wishlistItems');
+            }
+            
+            console.log('User logged out, cleared all local data');
+            
+            // Try to call API logout if available
+            try {
+                const API_URL = 'http://localhost:3000/api';
+                fetch(`${API_URL}/auth/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                }).catch(err => console.log('Logout API call failed:', err));
+            } catch (e) {
+                console.log('Could not perform API logout:', e);
+            }
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+
+        // Create a base64 placeholder image
+        const placeholderImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f8f9fa'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23adb5bd' font-size='24' font-family='Arial'%3EImage not found%3C/text%3E%3C/svg%3E";
+
+        // Sample products data
+        const products = [
+            // Bathroom Category
+            {
+                id: 1,
+                name: "Bamboo Toothbrush",
+                price: 149,
+                description: "Eco-friendly bamboo toothbrush with soft bristles.",
+                image: "images/toothbrush.jpeg",
+                category: "bathroom"
+            },
+            {
+                id: 2,
+                name: "Natural Loofah Sponge",
+                price: 199,
+                description: "100% natural loofah for gentle exfoliation and cleaning.",
+                image: "images/loofah.webp",
+                category: "bathroom"
+            },
+            {
+                id: 3,
+                name: "Bamboo Soap Dish",
+                price: 199,
+                description: "Natural bamboo soap dish with drainage slots.",
+                image: "images/soapshelf.jpeg.jpg",
+                category: "bathroom"
+            },
+            {
+                id: 4,
+                name: "Bamboo Cotton Buds",
+                price: 149,
+                description: "Biodegradable cotton buds with bamboo stems.",
+                image: "images/bamboobuds.jpeg.jpg",
+                category: "bathroom"
+            },
+            {
+                id: 5,
+                name: "Natural Shaving Soap",
+                price: 299,
+                description: "Traditional shaving soap made with natural ingredients.",
+                image: "images/shavingsoap.jpeg.jpg",
+                category: "bathroom"
+            },
+            {
+                id: 6,
+                name: "Safety Razor",
+                price: 899,
+                description: "Reusable metal safety razor for zero-waste shaving.",
+                image: "images/razor.jpeg",
+                category: "bathroom"
+            },
+
+            // Home & Kitchen Category
+            {
+                id: 7,
+                name: "Stainless Steel Water Bottle",
+                price: 999,
+                description: "Double-wall insulated water bottle for hot and cold drinks.",
+                image: "images/bottle2.jpeg",
+                category: "home-kitchen"
+            },
+            {
+                id: 8,
+                name: "Reusable Produce Bags",
+                price: 299,
+                description: "Set of 5 mesh bags for plastic-free grocery shopping.",
+                image: "images/netbag.jpg",
+                category: "home-kitchen"
+            },
+            {
+                id: 9,
+                name: "Bamboo Kitchen Set",
+                price: 1499,
+                description: "Complete set of bamboo kitchen utensils.",
+                image: "images/kit.webp",
+                category: "home-kitchen"
+            },
+            {
+                id: 10,
+                name: "Reusable Straws",
+                price: 249,
+                description: "Set of stainless steel straws with cleaning brush.",
+                image: "images/cup.jpeg",
+                category: "home-kitchen"
+            },
+            {
+                id: 11,
+                name: "Bamboo Bowl",
+                price: 399,
+                description: "Natural bamboo bowl for sustainable dining.",
+                image: "images/bowl.webp",
+                category: "home-kitchen"
+            },
+            {
+                id: 12,
+                name: "Beeswax Food Wraps",
+                price: 499,
+                description: "Set of 3 reusable food wraps, alternative to plastic wrap.",
+                image: "images/wrap.jpeg",
+                category: "home-kitchen"
+            },
+
+            // Cleaning Category
+            {
+                id: 13,
+                name: "Organic Cleaning Solution",
+                price: 449,
+                description: "All-purpose cleaner made with natural ingredients.",
+                image: "images/cleaning.jpeg",
+                category: "cleaning"
+            },
+            {
+                id: 14,
+                name: "Biodegradable Dish Brush",
+                price: 179,
+                description: "Eco-friendly dish brush with replaceable head.",
+                image: "images/dishbrushkit.jpeg.jpg",
+                category: "cleaning"
+            },
+            {
+                id: 15,
+                name: "Natural Scrubber",
+                price: 149,
+                description: "Plant-based scrubber for tough cleaning jobs.",
+                image: "images/scrubber.jpeg.jpg",
+                category: "cleaning"
+            },
+            {
+                id: 16,
+                name: "Wool Dryer Balls",
+                price: 399,
+                description: "Natural wool dryer balls to reduce drying time.",
+                image: "images/woolball.jpeg.jpg",
+                category: "cleaning"
+            },
+
+            // Personal Care Category
+            {
+                id: 17,
+                name: "Natural Shampoo Bar",
+                price: 299,
+                description: "Zero-waste shampoo bar with essential oils.",
+                image: "images/veganshampoo.jpeg",
+                category: "personal-care"
+            },
+            {
+                id: 18,
+                name: "Natural Face Serum",
+                price: 599,
+                description: "Organic face serum for healthy, glowing skin.",
+                image: "images/serum.jpeg",
+                category: "personal-care"
+            },
+            {
+                id: 19,
+                name: "Natural Toothpaste",
+                price: 199,
+                description: "Fluoride-free toothpaste in recyclable packaging.",
+                image: "images/paste.jpeg",
+                category: "personal-care"
+            },
+            {
+                id: 20,
+                name: "Wide-tooth Bamboo Comb",
+                price: 249,
+                description: "Sustainable bamboo comb for all hair types.",
+                image: "images/widecomb.jpeg.jpg",
+                category: "personal-care"
+            },
+
+            // Kids Category
+            {
+                id: 21,
+                name: "Kids Bamboo Toothbrush",
+                price: 129,
+                description: "Child-sized bamboo toothbrush with soft bristles.",
+                image: "images/kidbrush.jpeg",
+                category: "kids"
+            },
+            {
+                id: 22,
+                name: "Natural Crayons",
+                price: 299,
+                description: "Non-toxic crayons made from natural wax.",
+                image: "images/crayon.jpeg",
+                category: "kids"
+            },
+
+            // Pet Care Category
+            {
+                id: 23,
+                name: "Eco-friendly Dog Leash",
+                price: 699,
+                description: "Sustainable dog leash made from recycled materials.",
+                image: "images/dogleash.jpeg",
+                category: "pets"
+            },
+            {
+                id: 24,
+                name: "Natural Dog Toys",
+                price: 399,
+                description: "Durable dog toys made from natural materials.",
+                image: "images/dogtoys.jpeg",
+                category: "pets"
+            }
+        ];
+
+        // Filter products based on selected categories
+        function filterProducts() {
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+                .map(input => input.value);
+            
+            const selectedPriceRanges = Array.from(document.querySelectorAll('input[name="price"]:checked'))
+                .map(input => input.value);
+
+            let filteredProducts = products;
+
+            if (selectedCategories.length > 0) {
+                filteredProducts = filteredProducts.filter(product => 
+                    selectedCategories.includes(product.category)
+                );
+            }
+
+            if (selectedPriceRanges.length > 0) {
+                filteredProducts = filteredProducts.filter(product => {
+                    return selectedPriceRanges.some(range => {
+                        const [min, max] = range.split('-').map(Number);
+                        if (max) {
+                            return product.price >= min && product.price <= max;
+                        } else {
+                            return product.price >= min;
+                        }
+                    });
+                });
+            }
+
+            renderProducts(filteredProducts);
+        }
+
+        // Function to check if a product is in the wishlist
+        async function checkWishlistStatus() {
+            try {
+                console.log('Checking wishlist status for products display');
+                
+                // Get all wishlist button elements
+                const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+                
+                // First try to get wishlist items using the cart.js function
+                let wishlistItems = [];
+                
+                if (window.getLocalWishlist) {
+                    wishlistItems = window.getLocalWishlist();
+                } else {
+                    wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
+                }
+                
+                // If authenticated and we have a server-side getWishlist function
+                if (window.isAuthenticated && window.isAuthenticated() && window.getWishlist) {
+                    try {
+                        const serverWishlist = await window.getWishlist();
+                        if (serverWishlist && Array.isArray(serverWishlist.items)) {
+                            wishlistItems = serverWishlist.items;
+                        }
+                    } catch (error) {
+                        console.error('Error fetching server wishlist:', error);
+                        // Continue with local wishlist items
+                    }
+                }
+                
+                console.log('Retrieved wishlist items:', wishlistItems.length);
+                
+                // For each product card, check if it's in the wishlist
+                wishlistButtons.forEach(button => {
+                    // Get product ID from the button's onclick attribute
+                    const onclickAttr = button.getAttribute('onclick');
+                    const productIdMatch = onclickAttr.match(/addToWishlist\((\d+|'[^']+'|"[^"]+")\)/);
+                    
+                    if (productIdMatch && productIdMatch[1]) {
+                        // Clean up the product ID - remove quotes if present
+                        let productId = productIdMatch[1].replace(/['"]/g, '');
+                        
+                        // Check if this product is in the wishlist
+                        const inWishlist = wishlistItems.some(item => {
+                            const itemId = (item.id || '').toString();
+                            const itemProductId = (item.productId || '').toString();
+                            const cleanedProductId = productId.toString();
+                            
+                            return itemId === cleanedProductId || itemProductId === cleanedProductId;
+                        });
+                        
+                        // Update the heart icon fill and color
+                        const heartIcon = button.querySelector('i');
+                        if (inWishlist) {
+                            button.classList.add('in-wishlist');
+                            heartIcon.classList.add('in-wishlist');
+                        } else {
+                            button.classList.remove('in-wishlist');
+                            heartIcon.classList.remove('in-wishlist');
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error checking wishlist status:', error);
+            }
+        }
+
+        // Render products
+        function renderProducts(productsToRender = products) {
+            const container = document.getElementById('products-container');
+            if (productsToRender.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-light);">
+                        <h2>No products found</h2>
+                        <p>Try adjusting your filters to see more products.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = productsToRender.map(product => `
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img 
+                            src="${product.image}" 
+                            alt="${product.name}" 
+                            class="product-image"
+                            onerror="this.onerror=null; this.src='${placeholderImage}';"
+                        >
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">₹${product.price}</p>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-actions">
+                            ${product.id <= 3 ? 
+                                `<div style="display: flex; width: 100%; margin-bottom: 0.5rem;">
+                                    <a href="productdetail.html?id=${product.id}" class="btn btn-secondary" style="width: 100%;">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </a>
+                                </div>` : ''
+                            }
+                            <div style="display: flex; align-items: center; width: 100%;">
+                                <button class="btn btn-primary" onclick="addToCart('${product.id}')">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                                <button class="wishlist-btn" onclick="addToWishlist('${product.id}'); return false;" aria-label="Add to Wishlist">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // After rendering all products, check their wishlist status
+            checkWishlistStatus();
+        }
+
+        // Add event listeners to filters
+        document.querySelectorAll('input[type="checkbox"]').forEach(input => {
+            input.addEventListener('change', filterProducts);
+        });
+
+        // Update addToWishlist function to use server-side wishlist if available
+        async function addToWishlist(productId) {
+            console.log('Toggling product in wishlist:', productId);
+            
+            // Convert productId to a number if it's a string for proper comparison
+            if (typeof productId === 'string') {
+                productId = parseInt(productId, 10);
+            }
+            
+            const product = products.find(p => p.id === productId);
+            if (!product) {
+                console.error('Product not found:', productId);
+                // Debugging to help identify the issue
+                console.log('Available product IDs:', products.map(p => p.id));
+                console.log('Type of productId:', typeof productId);
+                return;
+            }
+
+            console.log('Product details for wishlist:', product);
+            
+            // Check if the product is already in the wishlist
+            let isInWishlist = false;
+            try {
+                if (typeof window.isInWishlist === 'function') {
+                    isInWishlist = await window.isInWishlist(productId.toString());
+                } else {
+                    // Fallback to check locally
+                    const wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
+                    isInWishlist = wishlistItems.some(item => 
+                        (item.id && item.id.toString() === productId.toString()) || 
+                        (item.productId && item.productId.toString() === productId.toString())
+                    );
+                }
+                console.log('Product is in wishlist:', isInWishlist);
+            } catch (error) {
+                console.error('Error checking wishlist status:', error);
+            }
+            
+            try {
+                if (isInWishlist) {
+                    // Remove from wishlist if already there
+                    if (typeof window.removeFromWishlist === 'function') {
+                        console.log('Removing product from wishlist using cart.js function');
+                        await window.removeFromWishlist(productId.toString());
+                        showToast(`Removed ${product.name} from wishlist`, 'success');
+                    } else {
+                        // Fallback removal
+                        console.log('Using fallback to remove from wishlist');
+                        let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
+                        wishlistItems = wishlistItems.filter(item => 
+                            !(item.id && item.id.toString() === productId.toString()) && 
+                            !(item.productId && item.productId.toString() === productId.toString())
+                        );
+                        localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+                        showToast(`Removed ${product.name} from wishlist`, 'success');
+                    }
+                } else {
+                    // Add to wishlist if not there
+                    if (typeof window.addToWishlist === 'function' && window.addToWishlist !== addToWishlist) {
+                        console.log('Using cart.js addToWishlist function');
+                        
+                        // Convert any numeric ID to string to prevent type confusion
+                        const productIdStr = productId.toString();
+                        
+                        await window.addToWishlist(
+                            productIdStr,          // productId
+                            product.price,         // price
+                            product.name,          // name
+                            product.image,         // image
+                            product.description    // description
+                        );
+                        
+                        // Show success message
+                        showToast(`Added ${product.name} to wishlist`, 'success');
+                    } else {
+                        // Fallback add to wishlist
+                        console.log('Using fallback to add to wishlist');
+                        let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
+                        const newItem = {
+                            id: productId.toString(),
+                            productId: productId.toString(),
+                            name: product.name,
+                            price: product.price,
+                            image: product.image,
+                            description: product.description,
+                            category: product.category
+                        };
+                        wishlistItems.push(newItem);
+                        localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+                        showToast(`Added ${product.name} to wishlist`, 'success');
+                    }
+                }
+                
+                // Update wishlist status for all products
+                await checkWishlistStatus();
+            } catch (error) {
+                console.error('Error toggling wishlist item:', error);
+                showToast('Failed to update wishlist', 'error');
+            }
+        }
+
+        // Update addToCart function to remove toast
+        function addToCart(productId, quantity = 1) {
+            console.log('Adding product to cart:', productId);
+            
+            // Convert productId to a number if it's a string for proper comparison
+            if (typeof productId === 'string') {
+                productId = parseInt(productId, 10);
+            }
+            
+            const product = products.find(p => p.id === productId);
+            if (!product) {
+                console.error('Product not found:', productId);
+                // Debugging to help identify the issue
+                console.log('Available product IDs:', products.map(p => p.id));
+                console.log('Type of productId:', typeof productId);
+                return;
+            }
+
+            console.log('Product details:', product);
+
+            try {
+                // First attempt to use the cart.js addToCart function
+                if (typeof window.addToCart === 'function' && window.addToCart !== addToCart) {
+                    console.log('Using cart.js addToCart function');
+                    
+                    // Convert any numeric ID to string to prevent type confusion
+                    const productIdStr = productId.toString();
+                    
+                    window.addToCart(
+                        productIdStr,      // productId
+                        quantity,          // quantity
+                        product.price,     // price
+                        product.name,      // name
+                        product.image      // image
+                    );
+                    
+                    // Show success message
+                    showAddToCartToast(product.name);
+                    return;
+                }
+            } catch (error) {
+                console.error('Error using cart.js addToCart function:', error);
+                // Continue with fallback implementation
+            }
+
+            console.log('Using fallback addToCart implementation');
+
+            // Fallback implementation if window.addToCart is not available
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            
+            // First check if the item already exists in the cart
+            const existingItem = cartItems.find(item => 
+                (item.id && item.id.toString() === productId.toString()) || 
+                (item.productId && item.productId.toString() === productId.toString())
+            );
+            
+            if (existingItem) {
+                // If item exists, increase quantity
+                existingItem.quantity = (parseInt(existingItem.quantity) || 0) + parseInt(quantity);
+                console.log('Updated existing item quantity:', existingItem);
+            } else {
+                // Otherwise add the new item
+                const newItem = {
+                    id: productId.toString(),  // Convert to string
+                    productId: productId.toString(), // Include both for compatibility
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: parseInt(quantity) || 1,
+                    description: product.description,
+                    category: product.category
+                };
+                cartItems.push(newItem);
+                console.log('Added new item to cart:', newItem);
+            }
+
+            // Save the updated cart
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            console.log('Updated cart saved to localStorage:', cartItems);
+            
+            // Remove any existing toasts
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(t => t.remove());
+            
+            // Create and show toast notification
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = `Added ${product.name} to cart`;
+            document.body.appendChild(toast);
+            
+            // Remove toast after 2 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 2000);
+        }
+
+        // Separate function to show toast to avoid recursion
+        function showAddToCartToast(productName) {
+            // Remove any existing toasts
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(t => t.remove());
+            
+            // Create and show toast notification
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = `Added ${productName} to cart`;
+            document.body.appendChild(toast);
+            
+            // Remove toast after 2 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out forwards';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 2000);
+        }
+
+        // Initialize the page by rendering all products
+        renderProducts();
+        
+        // Check if we need to sync cart or wishlist items
+        if (window.isAuthenticated && window.isAuthenticated()) {
+            console.log('User is authenticated, checking for items to sync');
+            
+            // Check for cart sync
+            if (window.checkForCartSync) {
+                window.checkForCartSync().then(result => {
+                    console.log('Cart sync completed:', result);
+                }).catch(error => {
+                    console.error('Error syncing cart:', error);
+                });
+            }
+            
+            // Check for wishlist sync
+            if (window.checkForWishlistSync) {
+                window.checkForWishlistSync().then(result => {
+                    console.log('Wishlist sync completed:', result);
+                }).catch(error => {
+                    console.error('Error syncing wishlist:', error);
+                });
+            }
+        }
+        
+        // Add fallback functions if cart.js fails to load
+        if (typeof window.addToCart !== 'function') {
+            // Create a new function in the window scope to avoid confusion with the local addToCart function
+            window.addToCart = function(productId, quantity, price, name, image) {
+                console.log('Using fallback addToCart function from window scope');
+                
+                let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                const existingItem = cartItems.find(item => item.id === productId || item.productId === productId);
+                
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cartItems.push({
+                        id: generateUUID(), // Generate a unique ID for the cart item
+                        productId: productId,
+                        quantity: quantity,
+                        price: price,
+                        name: name,
+                        image: image
+                    });
+                }
+                
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                
+                // Use the separate toast function to avoid duplication
+                showAddToCartToast(name);
+            };
+        }
+
+        // Add fallback for wishlist functions if cart.js fails to load
+        if (typeof window.addToWishlist !== 'function') {
+            // Create a new function in the window scope to avoid confusion with the local addToWishlist function
+            window.addToWishlist = function(productId, price, name, image, description) {
+                console.log('Using fallback addToWishlist function from window scope');
+                
+                let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
+                const existingItem = wishlistItems.find(item => 
+                    item.id === productId || item.productId === productId
+                );
+                
+                if (existingItem) {
+                    console.log('Item already in wishlist:', existingItem);
+                } else {
+                    wishlistItems.push({
+                        id: productId,
+                        productId: productId,
+                        price: price,
+                        name: name,
+                        image: image,
+                        description: description
+                    });
+                    localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+                }
+                
+                showAddToWishlistToast(name);
+                return Promise.resolve({ success: true });
+            };
+            
+            // Also provide getLocalWishlist function
+            window.getLocalWishlist = function() {
+                return JSON.parse(localStorage.getItem('wishlistItems')) || [];
+            };
+        }
+
+        // Helper function to generate UUID if needed
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Initialize the auth section when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Call updateAuthSection to initialize the auth dropdown
+            updateAuthSection();
+            
+            // Initialize products from the sample data defined above
+            renderProducts(products);
+        });
+    </script>
+</body>
+</html>

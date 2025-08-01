@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings - Eco Mart</title>
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* CSS Variables for theming */
+    :root {
+      /* Light theme colors (default) */
+      --background-color: #f2f2f2;
+      --card-background: #ffffff;
+      --text-color: #333333;
+      --text-secondary: #666666;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    /* Dark theme colors */
+    [data-theme="dark"] {
+      --background-color: #1a1a1a;
+      --card-background: #2a2a2a;
+      --text-color: #f5f5f5;
+      --text-secondary: #bbbbbb;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+    
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .settings-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    .settings-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .settings-header h1 {
+      font-size: 1.8rem;
+      color: var(--text-color);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .settings-header i {
+      color: var(--primary);
+    }
+
+    .settings-card {
+      background: var(--card-background);
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .settings-card:hover {
+      box-shadow: var(--hover-shadow);
+      transform: translateY(-3px);
+    }
+
+    .settings-card-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .settings-card-header h2 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .settings-card-header i {
+      color: var(--primary);
+    }
+
+    .settings-card-body {
+      padding: 1.5rem;
+    }
+
+    .settings-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .settings-option:last-child {
+      border-bottom: none;
+    }
+
+    .settings-option-label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .settings-option-label strong {
+      font-size: 1rem;
+      color: var(--text-color);
+      margin-bottom: 0.3rem;
+    }
+
+    .settings-option-label span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* Toggle Switch Styles */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 54px;
+      height: 28px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    /* Select box styles */
+    .theme-select {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background-color: var(--card-background);
+      color: var(--text-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .theme-select option {
+      background-color: var(--card-background);
+      color: var(--text-color);
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-cancel {
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--primary);
+      background: transparent;
+      color: var(--primary);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+      background: rgba(46, 125, 50, 0.1);
+    }
+
+    .btn-save {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-save:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Toast notification styles */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.success {
+      background-color: var(--success);
+    }
+
+    .toast.error {
+      background-color: var(--error);
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      transform: translateX(-5px);
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <nav class="main-nav container">
+      <a href="newhome.html" class="logo">
+        <img src="images/newlogo.png" alt="Eco Mart Logo" height="30">
+      </a>
+      <div class="nav-links">
+        <a href="newhome.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="category.html">Categories</a>
+        <a href="offers.html">Offers</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="cart.html">Cart</a>
+      </div>
+      <div id="auth-section">
+        <!-- Will be populated by JavaScript -->
+      </div>
+    </nav>
+  </header>
+
+  <div class="settings-container">
+    <a href="profile.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Profile
+    </a>
+    
+    <div class="settings-header">
+      <h1><i class="fas fa-cog"></i> Settings</h1>
+    </div>
+
+    <div class="settings-card">
+      <div class="settings-card-header">
+        <h2><i class="fas fa-bell"></i> Notifications</h2>
+      </div>
+      <div class="settings-card-body">
+        <div class="settings-option">
+          <div class="settings-option-label">
+            <strong>Email Notifications</strong>
+            <span>Receive order updates and promotions via email</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="email-notifications" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-option">
+          <div class="settings-option-label">
+            <strong>Order Updates</strong>
+            <span>Get notified about your order status</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="order-updates" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-option">
+          <div class="settings-option-label">
+            <strong>Promotional Emails</strong>
+            <span>Receive special offers and discounts</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="promotional-emails">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <div class="settings-card-header">
+        <h2><i class="fas fa-paint-brush"></i> Appearance</h2>
+      </div>
+      <div class="settings-card-body">
+        <div class="settings-option">
+          <div class="settings-option-label">
+            <strong>Theme</strong>
+            <span>Choose your preferred website theme</span>
+          </div>
+          <select class="theme-select" id="theme-select">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="system">System Default</option>
+          </select>
+        </div>
+        <div class="settings-option">
+          <div class="settings-option-label">
+            <strong>Product Layout</strong>
+            <span>Choose how products are displayed</span>
+          </div>
+          <select class="theme-select" id="layout-select">
+            <option value="grid">Grid View</option>
+            <option value="list">List View</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <div class="settings-card-header">
+        <h2><i class="fas fa-shield-alt"></i> Privacy</h2>
+      </div>
+      <div class="settings-card-body">
+        <div class="settings-option">
+          <div class="settings-option-label">
+            <strong>Save Browsing History</strong>
+            <span>Remember products you've viewed</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="browsing-history" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-option">
+          <div class="settings-option-label">
+            <strong>Data Collection</strong>
+            <span>Allow us to collect data to improve your experience</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="data-collection" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-option">
+          <div class="settings-option-label">
+            <strong>Cookie Settings</strong>
+            <span>Manage cookies used on this site</span>
+          </div>
+          <button class="btn-cancel" id="cookie-settings">Manage</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn-cancel" id="reset-settings">Reset to Default</button>
+      <button class="btn-save" id="save-settings">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- Toast notification container -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // API URL
+    const API_URL = 'http://127.0.0.1:3000/api';
+    
+    // Function to show toast notification
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Load settings from localStorage
+    function loadSettings() {
+      const settings = JSON.parse(localStorage.getItem('ecomart-settings')) || {
+        notifications: {
+          email: true,
+          orders: true,
+          promotions: false
+        },
+        appearance: {
+          theme: 'light',
+          layout: 'grid'
+        },
+        privacy: {
+          browsing: true,
+          dataCollection: true
+        }
+      };
+
+      // Apply settings to form elements
+      document.getElementById('email-notifications').checked = settings.notifications.email;
+      document.getElementById('order-updates').checked = settings.notifications.orders;
+      document.getElementById('promotional-emails').checked = settings.notifications.promotions;
+      
+      document.getElementById('theme-select').value = settings.appearance.theme;
+      document.getElementById('layout-select').value = settings.appearance.layout;
+      
+      document.getElementById('browsing-history').checked = settings.privacy.browsing;
+      document.getElementById('data-collection').checked = settings.privacy.dataCollection;
+      
+      // Apply the theme on page load
+      applyTheme(settings.appearance.theme);
+      
+      return settings;
+    }
+
+    // Save settings to localStorage
+    function saveSettings() {
+      const settings = {
+        notifications: {
+          email: document.getElementById('email-notifications').checked,
+          orders: document.getElementById('order-updates').checked,
+          promotions: document.getElementById('promotional-emails').checked
+        },
+        appearance: {
+          theme: document.getElementById('theme-select').value,
+          layout: document.getElementById('layout-select').value
+        },
+        privacy: {
+          browsing: document.getElementById('browsing-history').checked,
+          dataCollection: document.getElementById('data-collection').checked
+        }
+      };
+      
+      localStorage.setItem('ecomart-settings', JSON.stringify(settings));
+      showToast('Settings saved successfully!', 'success');
+      
+      // Apply theme if it was changed
+      applyTheme(settings.appearance.theme);
+    }
+
+    // Reset settings to default
+    function resetSettings() {
+      const defaultSettings = {
+        notifications: {
+          email: true,
+          orders: true,
+          promotions: false
+        },
+        appearance: {
+          theme: 'light',
+          layout: 'grid'
+        },
+        privacy: {
+          browsing: true,
+          dataCollection: true
+        }
+      };
+      
+      localStorage.setItem('ecomart-settings', JSON.stringify(defaultSettings));
+      loadSettings();
+      showToast('Settings reset to default', 'success');
+      
+      // Reset theme
+      applyTheme('light');
+    }
+
+    // Apply theme to the website
+    function applyTheme(theme) {
+      // Get the document element (root)
+      const root = document.documentElement;
+      
+      // Apply the theme data attribute
+      if (theme === 'dark') {
+        root.setAttribute('data-theme', 'dark');
+      } else if (theme === 'light') {
+        root.removeAttribute('data-theme');
+      } else if (theme === 'system') {
+        // Check for system preference
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkMode) {
+          root.setAttribute('data-theme', 'dark');
+        } else {
+          root.removeAttribute('data-theme');
+        }
+        
+        // Add listener for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+          const newTheme = e.matches ? 'dark' : 'light';
+          applySystemTheme(newTheme);
+        });
+      }
+      
+      // Store the current applied theme
+      localStorage.setItem('current-theme', theme);
+      
+      console.log(`Theme changed to: ${theme}`);
+    }
+    
+    // Helper function for system theme changes
+    function applySystemTheme(systemTheme) {
+      const settings = JSON.parse(localStorage.getItem('ecomart-settings')) || {};
+      
+      // Only apply system theme if the user has selected "system" option
+      if (settings.appearance && settings.appearance.theme === 'system') {
+        if (systemTheme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+      }
+    }
+
+    // Update auth section in navbar
+    function updateAuthSection() {
+      const authSection = document.getElementById('auth-section');
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (token) {
+        const displayName = user.username || user.name || 'User';
+        
+        authSection.innerHTML = `
+          <div class="user-profile">
+            <div class="user-profile-button">
+              <img src="${localStorage.getItem('profilePicture') || 'images/userlogo.png'}" alt="User" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 8px;">
+              <span style="color: var(--text-dark); font-weight: 500;">${displayName}</span>
+            </div>
+          </div>
+        `;
+      } else {
+        authSection.innerHTML = `
+          <a href="login.html" class="btn btn-primary">Login</a>
+          <a href="register.html" class="btn btn-secondary">Register</a>
+        `;
+      }
+    }
+
+    // Initialize settings page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load saved settings
+      loadSettings();
+      
+      // Update auth section
+      updateAuthSection();
+      
+      // Add event listeners
+      document.getElementById('save-settings').addEventListener('click', saveSettings);
+      document.getElementById('reset-settings').addEventListener('click', resetSettings);
+      
+      document.getElementById('cookie-settings').addEventListener('click', () => {
+        // This would typically open a modal with cookie settings
+        showToast('Cookie settings dialog would open here', 'success');
+      });
+      
+      // Theme select change listener (for immediate preview)
+      document.getElementById('theme-select').addEventListener('change', (e) => {
+        applyTheme(e.target.value);
+      });
+      
+      // Check for system theme changes
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        const newTheme = e.matches ? 'dark' : 'light';
+        applySystemTheme(newTheme);
+      });
+    });
+
+    // Check server status function
+    function checkServerStatus() {
+      return fetch(`${API_URL}/auth/profile`, { method: 'HEAD' })
+        .then(response => {
+          console.log("Server is running!");
+          return true;
+        })
+        .catch(error => {
+          console.error("Server connection error:", error);
+          showToast("Cannot connect to server. Please ensure backend is running.", "error");
+          return false;
+        });
+    }
+
+    // Call this when the page loads
+    document.addEventListener('DOMContentLoaded', async () => {
+      // First check if server is running
+      await checkServerStatus();
+    });
+  </script>
+</body>
+</html> 

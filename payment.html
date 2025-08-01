@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Portal - Eco Mart</title>
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .payment-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        input[type="text"], input[type="number"], input[type="email"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .summary-box {
+            background-color: var(--background-light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            font-weight: bold;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .payment-method {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover, .payment-method.active {
+            border-color: var(--primary);
+            background-color: rgba(46, 125, 50, 0.1);
+        }
+
+        .payment-method i {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        /* Toast styles */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include navigation -->
+    <div id="nav-placeholder"></div>
+
+    <div class="payment-container">
+        <h2>Complete Your Payment</h2>
+
+        <div class="summary-box">
+            <h3>Order Summary</h3>
+            <div id="order-items">
+                <!-- Order items will be dynamically loaded here -->
+            </div>
+            <div class="summary-total">
+                <div class="summary-item">
+                    <span>Total:</span>
+                    <span>₹<span id="total-amount">0</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-methods">
+            <div class="payment-method active" onclick="selectPaymentMethod(this, 'credit')">
+                <i class="fas fa-credit-card"></i>
+                <div>Credit Card</div>
+            </div>
+            <div class="payment-method" onclick="selectPaymentMethod(this, 'debit')">
+                <i class="fas fa-credit-card"></i>
+                <div>Debit Card</div>
+            </div>
+            <div class="payment-method" onclick="selectPaymentMethod(this, 'upi')">
+                <i class="fas fa-mobile-alt"></i>
+                <div>UPI</div>
+            </div>
+        </div>
+
+        <div id="payment-form">
+            <div class="form-group">
+                <label for="cardholder-name">Cardholder Name</label>
+                <input type="text" id="cardholder-name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="card-number">Card Number</label>
+                <input type="tel" id="card-number" placeholder="XXXX XXXX XXXX XXXX" required pattern="[0-9\s]{13,19}" maxlength="19">
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <div class="form-group" style="flex: 1;">
+                    <label for="expiry-date">Expiry Date</label>
+                    <input type="text" id="expiry-date" placeholder="MM/YY" required maxlength="5">
+                </div>
+
+                <div class="form-group" style="flex: 1;">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" placeholder="Enter CVV" required maxlength="3">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="billing-email">Billing Email</label>
+                <input type="email" id="billing-email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="billing-address">Billing Address</label>
+                <input type="text" id="billing-address" placeholder="Enter your address" required>
+            </div>
+
+            <button type="submit" onclick="processPayment()">Complete Payment</button>
+        </div>
+    </div>
+
+    <script>
+        // Load navigation
+        fetch('components/nav.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load navigation');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading navigation:', error);
+                document.getElementById('nav-placeholder').innerHTML = `
+                    <header class="main-header">
+                        <nav class="main-nav container">
+                            <div class="logo">
+                                <a href="newhome.html"><h1>Eco Mart</h1></a>
+                            </div>
+                        </nav>
+                    </header>
+                `;
+            });
+
+        // Load cart items from localStorage
+        const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+        
+        // Calculate total amount
+        let totalAmount = 0;
+        cartItems.forEach(item => {
+            totalAmount += (item.price * item.quantity);
+        });
+        
+        // If there's a saved total amount, use that instead
+        const savedTotal = localStorage.getItem("totalAmount");
+        if (savedTotal) {
+            totalAmount = parseFloat(savedTotal);
+        }
+        
+        // Display total amount
+        document.getElementById("total-amount").textContent = totalAmount;
+
+        // Render order items
+        function renderOrderItems() {
+            const orderItemsContainer = document.getElementById("order-items");
+            
+            if (cartItems.length === 0) {
+                orderItemsContainer.innerHTML = `<p>No items in your cart</p>`;
+                
+                // Show message but don't redirect immediately
+                showToast("Warning: Your cart appears to be empty. Please return to the cart page.");
+                
+                // Add a visible warning message
+                document.querySelector('.summary-box').innerHTML += `
+                    <div style="margin-top: 15px; padding: 10px; background-color: #fff8e1; border-left: 4px solid #ff8f00; color: #333;">
+                        <strong>Warning:</strong> Your cart appears to be empty. 
+                        <a href="cart.html" style="color: #ff8f00; text-decoration: underline;">Return to cart</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            let itemsHTML = '';
+            
+            cartItems.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                itemsHTML += `
+                    <div class="summary-item">
+                        <span>${item.name} × ${item.quantity}</span>
+                        <span>₹${itemTotal}</span>
+                    </div>
+                `;
+            });
+            
+            orderItemsContainer.innerHTML = itemsHTML;
+        }
+
+        // Function to select payment method
+        function selectPaymentMethod(element, method) {
+            // Remove active class from all payment methods
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Add active class to selected payment method
+            element.classList.add('active');
+            
+            // Store selected payment method
+            window.selectedPaymentMethod = method;
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Generate a unique order ID
+        function generateOrderId() {
+            return 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        // Process payment
+        function processPayment() {
+            // Basic validation for empty fields
+            const name = document.getElementById("cardholder-name").value;
+            const cardNumber = document.getElementById("card-number").value;
+            const expiry = document.getElementById("expiry-date").value;
+            const cvv = document.getElementById("cvv").value;
+            const email = document.getElementById("billing-email").value;
+            const address = document.getElementById("billing-address").value;
+
+            if (!name || !cardNumber || !expiry || !cvv || !email || !address) {
+                showToast("Please fill in all the payment details");
+                return;
+            }
+            
+            // Simple validation for cart items
+            if (cartItems.length === 0) {
+                showToast("Your cart is empty. Cannot process payment.");
+                return;
+            }
+            
+            // Process card number - remove spaces before validation
+            const cardDigits = cardNumber.replace(/\s/g, '');
+            
+            // Simple validation for card number (should be 16 digits)
+            if (cardDigits.length !== 16 || isNaN(cardDigits)) {
+                showToast("Please enter a valid 16-digit card number");
+                return;
+            }
+            
+            // Simple validation for expiry date (should be MM/YY format)
+            if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+                showToast("Please enter expiry date in MM/YY format");
+                return;
+            }
+            
+            // Simple validation for CVV (should be 3 digits)
+            if (cvv.length !== 3 || isNaN(cvv)) {
+                showToast("Please enter a valid 3-digit CVV");
+                return;
+            }
+
+            // Get shipping information
+            const shippingInfo = JSON.parse(localStorage.getItem('shippingInfo') || '{}');
+
+            // Create the order
+            const order = {
+                id: generateOrderId(),
+                date: new Date().toLocaleDateString('en-US', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                }),
+                status: 'Processing',
+                items: cartItems,
+                paymentMethod: window.selectedPaymentMethod || 'credit',
+                shippingAddress: shippingInfo.address || address,
+                billingEmail: email,
+                total: totalAmount
+            };
+            
+            // Store the order to be processed in orders.html
+            localStorage.setItem('pendingOrder', JSON.stringify(order));
+            
+            // Clear cart after successful payment
+            localStorage.removeItem('cartItems');
+            
+            // Show success message
+            showToast("Payment successful! Redirecting to your orders...");
+            
+            // Redirect to orders page after a delay
+            setTimeout(() => {
+                window.location.href = "orders.html";
+            }, 2000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            // First verify we have cart items
+            if (cartItems.length === 0) {
+                console.warn('Cart is empty when loading payment page');
+                
+                // Try to recover cart items one more time
+                const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+                if (cartItems.length === 0) {
+                    console.error('Could not recover cart items');
+                }
+            }
+            
+            // Render order items
+            renderOrderItems();
+            
+            // Default to first payment method
+            window.selectedPaymentMethod = 'credit';
+            
+            // Load shipping info if available
+            const shippingInfo = JSON.parse(localStorage.getItem('shippingInfo') || '{}');
+            if (shippingInfo.address) {
+                // Prefill billing address if shipping info is available
+                document.getElementById('billing-address').value = 
+                    `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state} ${shippingInfo.zipcode}`;
+                
+                // If shipping name is available, prefill cardholder name
+                if (shippingInfo.name) {
+                    document.getElementById('cardholder-name').value = shippingInfo.name;
+                }
+            }
+            
+            // Set up credit card input formatting
+            const cardNumberInput = document.getElementById('card-number');
+            cardNumberInput.addEventListener('input', function(e) {
+                // Get the value and remove all non-digit characters
+                let value = e.target.value.replace(/\D/g, '');
+                
+                // Format with spaces after every 4 digits
+                if (value.length > 0) {
+                    value = value.match(/.{1,4}/g).join(' ');
+                }
+                
+                // Update the input value
+                e.target.value = value;
+            });
+            
+            // Format expiry date with slash
+            const expiryInput = document.getElementById('expiry-date');
+            expiryInput.addEventListener('input', function(e) {
+                // Get the value and remove all non-digit characters
+                let value = e.target.value.replace(/\D/g, '');
+                
+                // Insert a slash after the first 2 digits
+                if (value.length > 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2);
+                }
+                
+                // Update the input value
+                e.target.value = value;
+            });
+        });
+    </script>
+</body>
+</html>

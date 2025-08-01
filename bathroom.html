@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>home & kitchen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+       
+        header {
+            background-color: #21c305;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            max-height: 50px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: rgb(8, 8, 8);
+            text-decoration: none;
+        }
+
+        .hero {
+            background: url('https://img.freepik.com/free-photo/eco-friendly-cleaning-products-set-basket-with-soaps-brushes_23-2148818497.jpg?size=626&ext=jpg&ga=GA1.1.1819120589.1727913600&semt=ais_hybrid') no-repeat center center/cover;
+            color: rgb(49, 162, 45);
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 40px;
+            margin: 0;
+        }
+
+       
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 30%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product-card h4 {
+            margin: 15px 0;
+        }
+
+        .product-card p {
+            color: #777;
+        }
+
+        .price {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .add-to-cart {
+            background-color: #49c14d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .add-to-cart:hover {
+            background-color: #0f5b1e;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+        .product-card button {
+            background-color: #4CAF50; 
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .logo {
+            max-height: 30px; 
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+        }
+
+        .login-button {
+            background-color: #17c517;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .login-button:hover {
+            background-color: #0ea015;
+        }
+        .user-profile {
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                gap: 8px;
+
+            }
+            #user-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+                color: #FFFFFF;
+                text-decoration: none;
+            }
+            #user-greeting {
+                font-weight: bold;
+                color: #FFFFFF;
+                text-decoration: none;
+            }
+            .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            gap: 8px;
+            }
+            #user-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+            #user-greeting {
+                font-weight: bold;
+            }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="newhome.html"><img src="images/newlogo.png" alt="ShopMate Logo" class="logo"></a>
+        <nav>
+            <ul>
+                <li><a href="offers.html">Offers</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="category.html">Categories</a></li>
+                <li><a href="learn.html">Learn</a></li>
+                <li><a href="wishlist.html">Wishlist</a></li>
+            </ul>
+        </nav>
+        <div id="auth-buttons">
+            <!-- Login Button (visible only when not logged in) -->
+            <a href="login.html" id="login-button" class="login-button">Login</a>
+            
+            <!-- User Profile (visible only when logged in) -->
+            <div id="user-profile" class="user-profile" style="display: none;">
+                <img id="user-avatar" src="images/userlogo.png" alt="User" />
+                <span id="user-greeting">Hello</span>
+            </div>
+            </div>
+        
+    </header>
+
+ 
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Explore Our Products</h2>
+        </div>
+    </section>
+
+ 
+    <section class="product-grid">
+   
+        <div class="product-card">
+            <img src="images/soap.webp" alt="Product 1">
+            <h4>Shampoo Bar</h4>
+            <p>High-quality natural soap</p>
+            <p class="price">₹150</p>
+            <a href="cart.html"><button onclick="addToCart('Shampoo Bar', 150, 'soap.webp', 1)">Add to Cart</button></a>        </div>
+
+       
+        <div class="product-card">
+            <img src="images/liquid.webp" alt="Product 2">
+            <h4>Powder to Liquid Handwash</h4>
+            <p>Powder to Liquid Handwash-Citrus Fragrance Pack of 2</p>
+            <p class="price">₹300</p>
+            <a href="cart.html"><button onclick="addToCart('Powder to Liquid Handwash', 300, 'liquid.webp', 1)">Add to Cart</button></a>        </div>
+
+      
+        <div class="product-card">
+            <img src="images/gift.webp" alt="Product 3">
+            <h4>Zero Waste Bath & Body Gift Bundle</h4>
+            <p>Zero Waste Bath & Body Gift Bundle | All in One Hair & Skin Care Set</p>
+            <p class="price">₹100</p>
+            <a href="cart.html"><button onclick="addToCart('Zero Waste Bath & Body Gift Bundle', 100, 'gift.webp', 1)">Add to Cart</button></a>        </div>
+
+      
+        <div class="product-card">
+            <img src="images/brush.webp" alt="Product 4">
+            <h4>Bamboo Toothbrush</h4>
+            <p>Bamboo Toothbrush (Pack of 4) </p>
+            <p class="price">₹300</p>
+            <a href="cart.html"><button onclick="addToCart('eco-friendly laundry detergent', 300, 'brush.webp', 1)">Add to Cart</button></a>        </div>
+
+        <!-- Product 5 -->
+        <div class="product-card">
+            <img src="images/salt.webp" alt="Product 5">
+            <h4>Rose Bath Salt</h4>
+            <p>fresh rose Fragrance</p>
+            <p class="price">₹200</p>
+            <a href="cart.html"><button onclick="addToCart('Rose Bath Salt', 200, 'salt.webp', 1)">Add to Cart</button></a>        </div>
+
+        <!-- Product 6 -->
+        <div class="product-card">
+            <img src="images/loofah.webp" alt="Product 6">
+            <h4>Natural Loofah</h4>
+            <p>Straight & Round Eco Friendly Loofah | Bottle Gourd Exfoliating Loofa Sun Dried</p>
+            <p class="price">₹50</p>
+            <a href="cart.html"><button onclick="addToCart('Natural Loofah', 50, 'loofah.webp', 1)">Add to Cart</button></a>        </div>
+    </section>
+    <script>
+        function addTocart()
+        {
+            alert("Added To Cart!");
+        }
+        function addToCart(productName, productPrice, productImage, quantity) {
+        // Get cart items from localStorage, or create an empty array if no items are stored
+        let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+        // Add the selected product to the cart
+        cartItems.push({
+            name: productName,
+            price: productPrice,
+            image: productImage,
+            quantity: quantity
+        });
+
+        // Store the updated cart back in localStorage
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+        // Notify the user that the item has been added
+        alert("Added to Cart!");
+    }
+    document.addEventListener("DOMContentLoaded", async function () {
+        // Retrieve the token stored during login
+        const token = localStorage.getItem("token");
+        
+        // Get UI element references
+        const loginButton = document.getElementById("login-button");
+        const userProfile = document.getElementById("user-profile");
+        const userGreeting = document.getElementById("user-greeting");
+        const userAvatar = document.getElementById("user-avatar");
+
+        if (token) {
+            // Hide the login button and show the user profile area
+            loginButton.style.display = "none";
+            userProfile.style.display = "flex";
+
+
+            try {
+                // Decode the token (assuming it contains an 'email' field)
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const email = payload.email;
+                
+                // Fetch profile data from the backend using the email
+                const response = await fetch(`http://localhost:5000/profile/${email}`);
+                const data = await response.json();
+
+                // If a valid profile is returned, update the avatar and greeting
+                if (!data.message) {
+                    userAvatar.src = data.profile_picture || "default-avatar.png";
+                    // Display the greeting with the username from the backend
+                    userGreeting.innerText = `Hello, ${data.name || "User"}`;
+                } else {
+                    console.log("No profile data found.");
+                }
+            } catch (err) {
+                console.error("Error decoding token or fetching profile:", err);
+            }
+        } else {
+            // If no token is found, show only the login button and hide user profile
+            loginButton.style.display = "inline-block";
+            userProfile.style.display = "none";
+        }
+
+        // Redirect to the profile page when the user clicks on the user profile section
+        userProfile.addEventListener("click", function () {
+            window.location.href = "profile.html";
+        });
+    });
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 ShopMate - All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>

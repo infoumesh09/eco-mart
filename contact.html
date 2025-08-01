@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="contact.css">
+</head>
+<style>
+   
+
+    h2 {
+        font-size: 1.2em; /* Ensure heading sizes match */
+    }
+
+    p {
+        color: #3b3939; /* Ensure text color matches */
+    }
+
+
+
+
+   
+    footer {
+        background-color: #07ba66;
+        color: white;
+        text-align: center;
+        margin: bottom 0px;;
+        padding: 1em 0;
+        position: relative;
+        width: 100%;
+        bottom: 0;
+    }
+
+    header {
+        background-color: #4eba2a;
+        color: rgb(255, 255, 255);
+        padding: 30px;
+        position:fixed;
+        width: 100%;
+        top:0px;
+    }
+
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    header h1 {
+        margin: 0;
+    }
+
+    .logo {
+        max-height: 30px; /* Adjust height to fit the header */
+    }
+
+    nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav ul li {
+        margin: 0 15px;
+    }
+
+    nav ul li a {
+        color: rgb(255, 255, 255);
+        text-decoration: none;
+    }
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f9f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+
+main {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-form, .contact-info {
+    background-color: white;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 10px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+}
+
+h2 {
+    color: #4CAF50;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+main{
+    margin-top: 70px;
+}
+</style>
+<body>
+    <header>
+        <header>
+            <a href="newhome.html"><img src="newlogo.png" alt="ShopMate Logo" class="logo"></a> <!-- Logo placeholder -->
+            <nav>
+                <ul>
+                    <li><a href="offers.html">Offers</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="category.html">Categories</a></li>
+                    <li><a href="learn.html">Learn</a></li>
+                    <li><a href="wishlist.html">Wishlist</a></li>
+                </ul>
+            </nav>
+            <a href="cart.html" class="cart-button">Cart</a>
+            
+        </header>
+        <h1>Contact Us</h1>
+        <p>We're here to help!</p>
+    </header>
+    <main>
+        <section class="contact-form">
+            <h2>Get in Touch</h2>
+           
+                <form onsubmit="showAlert(event)">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+                
+                <button type="submit">Send Message</button>
+            </form>
+        </section>
+        <section class="contact-info">
+            <h2>Contact Information</h2>
+            <p>Email: ecomartsupport@gmail.com</p>
+            <p>Phone: +91 9876543210</p>
+        </section>
+        
+    </main>
+    <footer>
+        <p>&copy; 2024 E-Commerce Website. All rights reserved.</p>
+    </footer>
+    <script>
+        function showAlert(event) {
+            event.preventDefault(); // Prevents the default form submission
+            alert('Info sent!');
+            // Optionally, you can add code here to actually submit the form via AJAX
+        }
+    </script>
+</body>
+</html>

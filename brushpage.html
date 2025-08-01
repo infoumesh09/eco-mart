@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Friendly Brush - Eco Mart</title>
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/product.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f5e9;
+            margin: 0;
+            padding: 0;
+            color: #2e7d32;
+        }
+        .cart-button:hover {
+            background: linear-gradient(135deg, #388e3c, #1b5e20);
+            transform: scale(1.08);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            min-width: 48px;
+            height: 48px;
+            padding: 0;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--background-light, #f8f9fa);
+            color: var(--primary, #2E7D32);
+            border: 1px solid var(--primary, #2E7D32);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary, #2E7D32);
+            color: white;
+        }
+        
+        .btn-secondary i {
+            font-size: 18px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .product-actions .btn-primary {
+            flex: 1;
+        }
+        
+        /* Footer Styles */
+        .main-footer {
+            background-color: #f9fafb;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            width: 100%;
+            position: relative;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            color: #1F2937;
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .footer-section p {
+            color: #6B7280;
+            line-height: 1.6;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #6B7280;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #2E7D32;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            color: #6B7280;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .social-links a:hover {
+            background: #2E7D32;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .footer-bottom p {
+            color: #6B7280;
+            margin: 0;
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include navigation -->
+    <div id="nav-placeholder"></div>
+
+    <main class="product-container">
+        <div class="slider" role="region" aria-label="Product images">
+            <div class="slides">
+                <img src="images/brush2.jpeg" alt="Bamboo brush front view" loading="lazy">
+                <img src="images/brush3.jpeg" alt="Bamboo brush side view" loading="lazy">
+            </div>
+            <button class="prev" onclick="prevSlide()" aria-label="Previous image">&#10094;</button>
+            <button class="next" onclick="nextSlide()" aria-label="Next image">&#10095;</button>
+        </div>
+        <div class="product-info">
+            <h2 id="product-name">Bamboo Toothbrush</h2>
+            <p>Eco-friendly bamboo toothbrush with soft bristles. Perfect for sustainable oral care.</p>
+            <ul class="features">
+                <li>100% biodegradable handle</li>
+                <li>Soft, BPA-free bristles</li>
+                <li>Ergonomic design</li>
+                <li>Naturally antimicrobial</li>
+            </ul>
+            <p class="price"><strong>Price: ₹<span id="product-price">149</span></strong></p>
+            <div class="quantity-selector">
+                <button onclick="updateQuantity(-1)" aria-label="Decrease quantity">-</button>
+                <input type="number" id="quantity" value="1" min="1" max="10" aria-label="Product quantity">
+                <button onclick="updateQuantity(1)" aria-label="Increase quantity">+</button>
+            </div>
+            <div class="product-actions">
+                <button class="btn btn-primary add-to-cart" onclick="addToCart()" aria-label="Add to shopping cart">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+                <button class="btn-secondary" onclick="addToWishlist()" aria-label="Add to wishlist">
+                    <i class="fas fa-heart"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Eco Mart</h3>
+                    <p>Your one-stop shop for sustainable and eco-friendly products.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="learn.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="shipping.html">Shipping Info</a></li>
+                        <li><a href="returns.html">Returns</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: support@ecomart.com</li>
+                        <li>Phone: (555) 123-4567</li>
+                        <li>Address: 123 Green Street</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Eco Mart. All rights reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load navigation
+        fetch('components/nav.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load navigation');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading navigation:', error);
+                document.getElementById('nav-placeholder').innerHTML = `
+                    <header class="main-header">
+                        <nav class="main-nav container">
+                            <div class="logo">
+                                <a href="newhome.html"><h1>Eco Mart</h1></a>
+                            </div>
+                        </nav>
+                    </header>
+                `;
+            });
+
+        let currentIndex = 0;
+        const slides = document.querySelector('.slides');
+
+        function showSlide() {
+            const totalSlides = slides.children.length;
+            currentIndex = (currentIndex + totalSlides) % totalSlides;
+            slides.style.transform = `translateX(${-currentIndex * 100}%)`;
+        }
+
+        function nextSlide() {
+            currentIndex++;
+            showSlide();
+        }
+
+        function prevSlide() {
+            currentIndex--;
+            showSlide();
+        }
+
+        function updateQuantity(change) {
+            const quantityInput = document.getElementById('quantity');
+            let newValue = parseInt(quantityInput.value) + change;
+            newValue = Math.max(1, Math.min(10, newValue));
+            quantityInput.value = newValue;
+        }
+
+        function addToCart() {
+            const productName = document.getElementById('product-name').textContent;
+            const productPrice = parseFloat(document.getElementById('product-price').textContent);
+            const quantity = parseInt(document.getElementById('quantity').value);
+            
+            const cartItem = {
+                id: Date.now(),
+                name: productName,
+                price: productPrice,
+                quantity: quantity,
+                image: 'images/brush2.jpeg'
+            };
+
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            
+            // Check if product already exists in cart
+            const existingItemIndex = cartItems.findIndex(item => item.name === productName);
+            if (existingItemIndex > -1) {
+                cartItems[existingItemIndex].quantity += quantity;
+            } else {
+                cartItems.push(cartItem);
+            }
+
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = `Added ${quantity} ${productName} to cart`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function addToWishlist() {
+            const productName = document.getElementById('product-name').textContent;
+            
+            let wishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || [];
+            
+            // Check if product already exists in wishlist
+            const existingItemIndex = wishlistItems.findIndex(item => item.name === productName);
+            if (existingItemIndex > -1) {
+                // Product already exists in wishlist
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = `${productName} is already in your wishlist`;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => toast.remove(), 3000);
+            } else {
+                // Product does not exist in wishlist
+                const cartItem = {
+                    id: Date.now(),
+                    name: productName,
+                    price: parseFloat(document.getElementById('product-price').textContent),
+                    quantity: 1,
+                    image: 'images/brush2.jpeg'
+                };
+
+                wishlistItems.push(cartItem);
+
+                localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+                
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = `Added ${productName} to your wishlist`;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => toast.remove(), 3000);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'ArrowRight') nextSlide();
+        });
+    </script>
+</body>
+</html>
+

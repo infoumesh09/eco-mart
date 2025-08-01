@@ -1,0 +1,274 @@
+<header class="main-header">
+  <nav class="main-nav container">
+    <a href="newhome.html" class="logo">
+      <img src="images/newlogo.png" alt="Eco Mart Logo" height="30">
+    </a>
+    <div class="nav-links">
+      <a href="newhome.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="category.html">Categories</a>
+      <a href="offers.html">Offers</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="cart.html">Cart</a>
+    </div>
+    <div id="auth-section">
+      <!-- Will be populated by JavaScript -->
+    </div>
+  </nav>
+</header>
+
+<style>
+/* Header Styles */
+.user-profile {
+  position: relative;
+}
+
+.user-profile-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.user-profile-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.user-profile-button img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-profile-button span {
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.user-profile-button i {
+  color: var(--text-dark);
+  transition: transform 0.3s ease;
+}
+
+.user-profile-button.active i {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 220px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu ul {
+  list-style: none;
+}
+
+.dropdown-menu li {
+  margin: 2px 0;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  background: none;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  text-decoration: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--primary);
+}
+
+.dropdown-menu i {
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+  margin: 8px 0;
+}
+
+/* Toast notification styles */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.toast.success {
+  background-color: var(--success);
+}
+
+.toast.error {
+  background-color: var(--error);
+}
+
+.toast.show {
+  opacity: 1;
+}
+</style>
+
+<script>
+// Function to show toast notification
+function showToast(message, type) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = `toast ${type}`;
+  toast.classList.add('show');
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// Function to update auth section with dropdown
+function updateAuthSection() {
+  const authSection = document.getElementById('auth-section');
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  if (token && user) {
+    authSection.innerHTML = `
+      <div class="user-profile">
+        <button class="user-profile-button" onclick="toggleDropdown(event)">
+          <img src="${localStorage.getItem('profilePicture') || 'images/userlogo.png'}" alt="User">
+          <span>${user.name || 'User'}</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu" id="userDropdown">
+          <ul>
+            <li>
+              <a href="profile.html">
+                <i class="fas fa-user"></i>
+                Profile
+              </a>
+            </li>
+            <li>
+              <a href="orders.html">
+                <i class="fas fa-shopping-bag"></i>
+                Orders
+              </a>
+            </li>
+            <li>
+              <a href="wishlist.html">
+                <i class="fas fa-heart"></i>
+                Wishlist
+              </a>
+            </li>
+            <li>
+              <a href="cart.html">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+              </a>
+            </li>
+            <li>
+              <a href="settings.html">
+                <i class="fas fa-cog"></i>
+                Settings
+              </a>
+            </li>
+            <li class="dropdown-divider"></li>
+            <li>
+              <button onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    `;
+  } else {
+    authSection.innerHTML = `
+      <div class="auth-buttons">
+        <a href="register.html" class="btn btn-outline">Register</a>
+        <a href="login.html" class="btn btn-primary">Login</a>
+      </div>
+    `;
+  }
+}
+
+// Function to toggle dropdown
+function toggleDropdown(event) {
+  event.stopPropagation();
+  const dropdown = document.getElementById('userDropdown');
+  const button = event.currentTarget;
+  button.classList.toggle('active');
+  dropdown.classList.toggle('show');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (event) => {
+  const dropdown = document.getElementById('userDropdown');
+  const button = document.querySelector('.user-profile-button');
+  if (dropdown && !event.target.closest('.user-profile')) {
+    dropdown.classList.remove('show');
+    button?.classList.remove('active');
+  }
+});
+
+// Function to handle logout
+function handleLogout() {
+  // Clear wishlist items from localStorage when logging out
+  if (window.clearLocalWishlist) {
+    window.clearLocalWishlist();
+  } else {
+    localStorage.removeItem('wishlistItems');
+  }
+  
+  // Also clear standard authentication data  
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  
+  // Redirect to login page
+  window.location.href = 'login.html';
+}
+
+// Initialize auth section when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  updateAuthSection();
+});
+</script> 

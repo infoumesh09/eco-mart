@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Eco Mart - Sustainable Shopping</title>
+    <!-- Theme Loader Script - Apply theme before page renders to prevent flash -->
+    <script>
+        (function() {
+            // Get theme setting from localStorage
+            const settings = JSON.parse(localStorage.getItem('ecomart-settings')) || {
+                appearance: { theme: 'light' }
+            };
+            
+            const theme = settings.appearance.theme;
+            
+            // Apply the theme
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else if (theme === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+            } else if (theme === 'system') {
+                // Check for system preference
+                const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (prefersDarkMode) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                }
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .hero {
+            background: url("images/hero.jpg") no-repeat center center/cover;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--background-white);
+            position: relative;
+            margin-top: 0;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--background-white);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .featured-categories {
+            padding: 4rem 0;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .featured-products {
+            background: var(--background-light);
+            padding: 4rem 0;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--text-dark);
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        /* User Profile Button Styles */
+        .user-profile {
+            position: relative;
+        }
+
+        .user-profile-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile-button:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .user-profile-button img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-profile-button span {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .user-profile-button i {
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+
+        .user-profile-button.active i {
+            transform: rotate(180deg);
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            width: 200px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown-menu li {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-menu li:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu li a,
+        .dropdown-menu li button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu li a:hover,
+        .dropdown-menu li button:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+        }
+
+        .dropdown-menu li i {
+            color: var(--text-light);
+            width: 1rem;
+            text-align: center;
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid #eee;
+            margin: 0.5rem 0;
+        }
+
+        /* User Dropdown Menu Styles */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-dark, #333);
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .dropdown-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .user-name {
+            font-weight: 500;
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-color, #2E7D32);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: var(--text-dark, #333);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .product-card {
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .product-actions button {
+            flex: 1;
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <nav class="main-nav container">
+            <a href="newhome.html" class="logo">
+                <img src="images/newlogo.png" alt="Eco Mart Logo" height="30">
+            </a>
+            <div class="nav-links">
+                <a href="newhome.html" class="active">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="category.html">Categories</a>
+                <a href="offers.html">Offers</a>
+                <a href="wishlist.html">Wishlist</a>
+                <a href="cart.html">Cart</a>
+            </div>
+            <div id="auth-section">
+                <a href="register.html" class="btn btn-secondary">Register</a>
+                <a href="login.html" class="btn btn-primary">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Sustainable Living Made Easy</h1>
+            <p>Discover our collection of eco-friendly products for a better tomorrow</p>
+            <a href="shop.html" class="btn btn-primary">Shop Now</a>
+        </div>
+    </section>
+
+    <section class="featured-categories">
+        <div class="container">
+            <div class="section-header">
+                <h2>Shop by Category</h2>
+                <p>Explore our wide range of sustainable products</p>
+            </div>
+            <div class="category-grid">
+                <a href="home-and-kitchen.html" class="category-card">
+                    <img src="images/kitchen.jpeg" alt="Home & Kitchen">
+                    <div class="overlay">Home & Kitchen</div>
+                </a>
+                <a href="bathroom.html" class="category-card">
+                    <img src="images/bathroom.jpeg" alt="Bathroom">
+                    <div class="overlay">Bathroom</div>
+                </a>
+                <a href="cleaning.html" class="category-card">
+                    <img src="images/cleaning.jpeg" alt="Cleaning">
+                    <div class="overlay">Cleaning</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-products">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Products</h2>
+                <p>Our most popular eco-friendly items</p>
+            </div>
+            <div class="product-grid" id="featured-products">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Eco Mart</h3>
+                    <p>Your one-stop shop for sustainable and eco-friendly products.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="learn.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="shipping.html">Shipping Info</a></li>
+                        <li><a href="returns.html">Returns</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: support@ecomart.com</li>
+                        <li>Phone: (555) 123-4567</li>
+                        <li>Address: 123 Green Street</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <p>&copy; 2024 Eco Mart. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Include cart.js -->
+    <script src="scripts/cart.js"></script>
+    <script>
+        // Function to update auth section based on login state
+        function updateAuthSection() {
+            const authSection = document.getElementById('auth-section');
+            
+            if (!authSection) {
+                console.warn('Auth section not found in the navigation. Make sure your HTML contains an element with id="auth-section".');
+                return;
+            }
+            
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (token) {
+                // User is logged in
+                const displayName = user.username || user.name || user.email || 'User';
+                const userInitial = displayName.charAt(0).toUpperCase();
+                
+                // Create user dropdown for authenticated users
+                authSection.innerHTML = `
+                    <div class="user-dropdown">
+                        <button class="dropdown-button">
+                            <span class="user-name">${displayName}</span>
+                            <div class="user-avatar">${userInitial}</div>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            <a href="orders.html"><i class="fas fa-shopping-bag"></i> Orders</a>
+                            <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+                            <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listener to logout button
+                const logoutBtn = document.getElementById('logout-btn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        handleLogout();
+                    });
+                }
+                
+                // Add event listener to toggle dropdown
+                const dropdownButton = authSection.querySelector('.dropdown-button');
+                const dropdownContent = authSection.querySelector('.dropdown-content');
+                
+                if (dropdownButton && dropdownContent) {
+                    dropdownButton.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        dropdownContent.classList.toggle('show');
+                    });
+                    
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(event) {
+                        if (!event.target.closest('.user-dropdown')) {
+                            dropdownContent.classList.remove('show');
+                        }
+                    });
+                }
+            } else {
+                // User is not logged in
+                authSection.innerHTML = `
+                    <a href="login.html" class="btn btn-primary">Login</a>
+                    <a href="register.html" class="btn btn-secondary">Register</a>
+                `;
+            }
+        }
+
+        // Function to handle logout
+        function handleLogout() {
+            // Backup wishlist items before logout if they exist
+            const wishlistItems = localStorage.getItem('wishlistItems');
+            if (wishlistItems) {
+                console.log('Backing up wishlist items before logout');
+                localStorage.setItem('wishlistItemsBackup', wishlistItems);
+            }
+            
+            // Clear all user-related data
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            
+            // Clear cart and wishlist data
+            if (window.clearLocalCart) {
+                window.clearLocalCart();
+            } else {
+                localStorage.removeItem('cartItems');
+            }
+            
+            if (window.clearLocalWishlist) {
+                window.clearLocalWishlist();
+            } else {
+                localStorage.removeItem('wishlistItems');
+            }
+            
+            console.log('User logged out, cleared all local data');
+            
+            // Try to call API logout if available
+            try {
+                const API_URL = 'http://localhost:3000/api';
+                fetch(`${API_URL}/auth/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                }).catch(err => console.log('Logout API call failed:', err));
+            } catch (e) {
+                console.log('Could not perform API logout:', e);
+            }
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+
+        // Helper function to show toast messages
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Function to add a product to cart
+        async function addProductToCart(product) {
+            try {
+                console.log('Attempting to add product to cart:', product);
+                
+                // For UUID compatibility, ensure ID is a valid format if using UUID in backend
+                const productId = product.id || `product-${Date.now()}`;
+                
+                await addToCart(
+                    productId,
+                    1, // Default quantity
+                    product.price,
+                    product.name,
+                    product.image
+                );
+                
+                showToast(`${product.name} added to cart!`);
+            } catch (error) {
+                console.error('Error in addProductToCart:', error);
+                showToast(`Failed to add ${product.name} to cart. Please try again.`, 'error');
+            }
+        }
+
+        // Check authentication state when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthSection();
+            renderFeaturedProducts();
+        });
+
+        // Featured Products Data
+        const featuredProducts = [
+            {
+                id: "prod-1",
+                name: "Bamboo Toothbrush",
+                price: 149,
+                image: "images/brush2.jpeg",
+                link: "brushpage.html"
+            },
+            {
+                id: "prod-2",
+                name: "Eco-Friendly Water Bottle",
+                price: 299,
+                image: "images/bottle2.jpeg",
+                link: "bottlepage.html"
+            },
+            {
+                id: "prod-3",
+                name: "Eco-Friendly Soap",
+                price: 199,
+                image: "images/soap.webp",
+                link: "productpage.html?product=soap&price=199&name=Eco-Friendly%20Soap&image=images/soap.webp"
+            },
+            {
+                id: "prod-4",
+                name: "Bamboo Cotton Buds",
+                price: 99,
+                image: "images/bamboobuds.jpeg.jpg",
+                link: "productpage.html?product=buds&price=99&name=Bamboo%20Cotton%20Buds&image=images/bamboobuds.jpeg.jpg"
+            }
+        ];
+
+        // Render Featured Products
+        function renderFeaturedProducts() {
+            const container = document.getElementById('featured-products');
+            container.innerHTML = featuredProducts.map(product => `
+                <div class="product-card">
+                    <a href="${product.link}">
+                        <img src="${product.image}" alt="${product.name}">
+                    </a>
+                    <h3>${product.name}</h3>
+                    <p class="price">₹${product.price}</p>
+                    <div class="product-actions">
+                        <a href="${product.link}" class="btn btn-secondary">View Details</a>
+                        <button class="btn btn-primary" onclick="addProductToCart({
+                            id: '${product.id}',
+                            name: '${product.name}',
+                            price: ${product.price},
+                            image: '${product.image}'
+                        })">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
